@@ -235,13 +235,13 @@ document.addEventListener("DOMContentLoaded", () => {
   clickRight.addEventListener("pointerdown", proximo);
 
   // Iniciar animação
-  start.addEventListener("click", () => {
-    start.classList.add("hide");
-    music.play().catch(()=>{});
+start.addEventListener("click", () => {
+    start.style.opacity = "0";       // desaparece visualmente
+    start.style.pointerEvents = "none"; // não atrapalha cliques
 
-    document.querySelectorAll(".touch-indicator").forEach(i => i.classList.add("show"));
-
-    setTimeout(()=>{ mostrar(); }, 500);
+    setTimeout(() => {
+        start.style.display = "none"; // remove totalmente depois da transição
+    }, 500); // 500ms igual à duração da transição
   });
 
 });
