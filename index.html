@@ -17,7 +17,7 @@ display:flex;
 align-items:center;
 justify-content:center;
 
-font-family: Georgia, serif;
+font-family:Georgia,serif;
 color:white;
 text-align:center;
 
@@ -52,13 +52,15 @@ display:flex;
 align-items:center;
 justify-content:center;
 
-font-size:clamp(18px, 3vw, 26px);
+font-size:clamp(18px,3vw,26px);
 letter-spacing:2px;
 
-background:rgba(0,0,0,0.6);
+background:rgba(0,0,0,0.65);
 
 cursor:pointer;
 transition:opacity 1.5s;
+
+z-index:10;
 }
 
 .start-screen.hide{
@@ -72,18 +74,19 @@ pointer-events:none;
 position:relative;
 max-width:90%;
 padding:clamp(20px,4vw,40px);
-  
+
 line-height:1.8;
 
 background:rgba(0,0,0,0.25);
 border-radius:12px;
 backdrop-filter:blur(4px);
-  
+
 text-shadow:0 2px 15px rgba(0,0,0,0.9);
 
 opacity:0;
 transform:translateY(20px);
-transition:opacity 1.5s, transform 1.5s;
+transition:opacity 1.2s, transform 1.2s;
+
 z-index:2;
 }
 
@@ -95,19 +98,19 @@ transform:translateY(0);
 /* frase final */
 
 .final{
-font-size:clamp(28px, 5vw, 40px);
+font-size:clamp(28px,5vw,40px);
 letter-spacing:2px;
 }
 
 /* áreas de clique */
 
 .click-zone{
-cursor:pointer;
 position:absolute;
 top:0;
 height:100%;
 width:50%;
 z-index:5;
+cursor:pointer;
 }
 
 .left{ left:0; }
@@ -119,7 +122,6 @@ z-index:5;
 <body>
 
 <div class="overlay"></div>
-<div class="stars"></div>
 
 <div class="start-screen" id="start">
 ✨ Toque na tela para começar
@@ -201,22 +203,23 @@ start.classList.add("hide")
 
 music.play().catch(()=>{})
 
-/* ativa cliques depois de iniciar */
-
 setTimeout(()=>{
 mostrar()
-},1000)
+},800)
 
-/* inicia troca automatica */
+/* troca automática */
 
 setInterval(()=>{
+
 if(index < frases.length-1){
+
 index++
 mostrar()
+
 }
 
-},8000)
-  
+},9000)
+
 })
 
 </script>
