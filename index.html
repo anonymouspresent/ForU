@@ -102,6 +102,35 @@ font-size:clamp(28px,5vw,40px);
 letter-spacing:2px;
 }
 
+/* indicadores de toque */
+
+.touch-indicator{
+position:absolute;
+top:50%;
+transform:translateY(-50%);
+font-size:clamp(18px,2vw,26px);
+color:rgba(255,255,255,0.35);
+user-select:none;
+pointer-events:none;
+opacity:0;
+transition:opacity 1.5s;
+z-index:6;
+}
+
+.touch-indicator.left{
+left:3%;
+}
+
+.touch-indicator.right{
+right:3%;
+}
+
+/* aparecem depois que começa */
+
+.touch-indicator.show{
+opacity:0.6;
+}
+  
 /* barra de progresso */
   
 #progress-bar{
@@ -147,6 +176,8 @@ cursor:pointer;
 </div>
 
 <div class="container" id="text"></div>
+<div class="touch-indicator left">‹</div>
+<div class="touch-indicator right">›</div>
 
 <div class="click-zone left" onclick="voltar()"></div>
 <div class="click-zone right" onclick="proximo()"></div>
@@ -231,22 +262,30 @@ start.classList.add("hide")
 
 music.play().catch(()=>{})
 
+document.querySelectorAll(".click-zone").forEach(z=>{
+z.style.pointerEvents = "auto"
+})
+
+document.querySelectorAll(".touch-indicator").forEach(i=>{
+i.classList.add("show")
+})
+
 setTimeout(()=>{
 mostrar()
-},800)
+},1000)
 
 /* troca automática */
 
+setTimeout(()=>{
+mostrar()
+},1000)
+
 setInterval(()=>{
-
 if(index < frases.length-1){
-
 index++
 mostrar()
-
 }
-
-},9000)
+},8000)
 
 })
 
