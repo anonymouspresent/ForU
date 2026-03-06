@@ -122,6 +122,7 @@ position:absolute;
 top:0;
 height:100%;
 width:50%;
+pointer-events:none;
 }
 
 .left{ left:0; }
@@ -136,7 +137,7 @@ width:50%;
 <div class="stars"></div>
 
 <div class="start-screen" id="start">
-✨ Toque na tela
+✨ Toque na tela para começar
 </div>
 
 <div class="container" id="text"></div>
@@ -214,6 +215,10 @@ start.addEventListener("click", () => {
 start.classList.add("hide")
 
 music.play().catch(()=>{})
+
+/* ativa cliques depois de iniciar */
+
+document.querySelectorAll(".click-zone").forEach(z=>{z.style.pointerEvents = "auto"})
 
 setTimeout(()=>{
 mostrar()
