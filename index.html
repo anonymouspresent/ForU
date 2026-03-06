@@ -112,13 +112,13 @@ width:100%;
 height:4px;
 background:rgba(255,255,255,0.15);
 z-index:10;
+overflow:white;
 }
 
 #progress{
 height:100%;
 width:0%;
 background:white;
-transition:width 0.5s;
 }
 
 /* áreas de clique */
@@ -181,7 +181,8 @@ let index = 0
 const text = document.getElementById("text")
 const start = document.getElementById("start")
 const music = document.getElementById("music")
-
+const progress = document.getElementById("progress")
+  
 function mostrar(){
 
 text.classList.remove("show")
@@ -198,21 +199,27 @@ progress.style.width = ((index+1)/frases.length)*100 + "%"
 
 }
 
-function proximo(){
+function mostrar(){
 
-if(index < frases.length-1){
-index++
-mostrar()
-}
+text.classList.remove("show")
 
-}
+progress.style.transition = "none"
+progress.style.width = "0%"
 
-function voltar(){
+setTimeout(()=>{
 
-if(index > 0){
-index--
-mostrar()
-}
+text.innerHTML = frases[index]
+
+text.classList.add("show")
+
+/* anima barra */
+
+setTimeout(()=>{
+progress.style.transition = "width 8s linear"
+progress.style.width = "100%"
+},50)
+
+},400)
 
 }
 
