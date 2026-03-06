@@ -219,31 +219,35 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 8000);
   };
 
-  // eventos de clique
-  clickLeft.addEventListener("pointerdown", voltar);
-  clickRight.addEventListener("pointerdown", proximo);
+// Modifique os eventos de clique para checar se o 'start' ainda existe
+  clickLeft.addEventListener("pointerdown", () => {
+    if (start.style.display === "none") {
+      voltar();
+    }
+  });
 
-// Iniciar animação e remover a tela de início
-  start.addEventListener("pointerdown", () => {
-    // Esconde visualmente
+  clickRight.addEventListener("pointerdown", () => {
+    if (start.style.display === "none") {
+      proximo();
+    }
+  });
+
+  // Função para iniciar tudo
+  const iniciar = () => {
     start.style.opacity = "0";
     start.style.pointerEvents = "none";
 
-    // Remove do processamento após a transição de fade
     setTimeout(() => {
       start.style.display = "none";
     }, 500);
 
-    // Toca a música
     music.play().catch((e) => console.log("Erro ao tocar música:", e));
-    
-    // Mostra as setas laterais
     indicators.forEach(i => i.classList.add("show"));
+    mostrar();
+  };
 
-    // Inicia a primeira frase
-    mostrar(); 
-  }, { once: true }); // O "once: true" garante que esse código só rode uma vez
-
+  // Escuta o clique na tela inteira para garantir que comece
+  start.addEventListener("pointerdown", iniciar, { once: true });
 });
 </script>
 </body>
