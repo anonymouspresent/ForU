@@ -5,6 +5,7 @@
 <title>Para Você</title>
 
 <style>
+
 body{
     margin:0;
     height:100vh;
@@ -13,38 +14,60 @@ body{
     justify-content:center;
     text-align:center;
     color:white;
-    font-family: Arial, sans-serif;
+    font-family: Arial;
     background-image:url("fundo.jpg");
     background-size:cover;
     background-position:center;
 }
 
-.mensagem{
+.caixa{
     background: rgba(0,0,0,0.5);
     padding:40px;
     border-radius:15px;
 }
+
+button{
+    margin-top:20px;
+    padding:12px 25px;
+    font-size:16px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+}
+
 </style>
+
 </head>
 
 <body>
 
-<div class="mensagem">
+<div class="caixa">
+
 <h1>Para você</h1>
 
 <p>
 Algumas pessoas aparecem na nossa vida de um jeito inesperado  
-e acabam se tornando especiais.  
+e acabam se tornando especiais.
 <br><br>
 Espero que esse pequeno gesto consiga mostrar um pouco do quanto
 eu gosto de ter você por perto.
 </p>
 
+<button onclick="tocarMusica()">Clique aqui</button>
+
 </div>
 
-<audio autoplay loop>
+<audio id="musica" loop>
 <source src="musica.mp3" type="audio/mpeg">
 </audio>
+
+<script>
+
+function tocarMusica(){
+    document.getElementById("musica").play();
+}
+
+</script>
 
 </body>
 </html>
