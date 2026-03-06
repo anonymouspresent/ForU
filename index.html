@@ -209,26 +209,11 @@ const frases = [
 ]
 
 let index = 0
+
 const text = document.getElementById("text")
 const start = document.getElementById("start")
 const music = document.getElementById("music")
 const progress = document.getElementById("progress")
-  
-function mostrar(){
-
-text.classList.remove("show")
-
-setTimeout(()=>{
-
-text.innerHTML = frases[index]
-
-text.classList.add("show")
-
-progress.style.width = ((index+1)/frases.length)*100 + "%"
-
-},400)
-
-}
 
 function mostrar(){
 
@@ -243,8 +228,6 @@ text.innerHTML = frases[index]
 
 text.classList.add("show")
 
-/* anima barra */
-
 setTimeout(()=>{
 progress.style.transition = "width 8s linear"
 progress.style.width = "100%"
@@ -254,7 +237,23 @@ progress.style.width = "100%"
 
 }
 
-/* iniciar experiência */
+function proximo(){
+
+if(index < frases.length-1){
+index++
+mostrar()
+}
+
+}
+
+function voltar(){
+
+if(index > 0){
+index--
+mostrar()
+}
+
+}
 
 start.addEventListener("click", () => {
 
@@ -262,19 +261,9 @@ start.classList.add("hide")
 
 music.play().catch(()=>{})
 
-document.querySelectorAll(".click-zone").forEach(z=>{
-z.style.pointerEvents = "auto"
-})
-
 document.querySelectorAll(".touch-indicator").forEach(i=>{
 i.classList.add("show")
 })
-
-setTimeout(()=>{
-mostrar()
-},1000)
-
-/* troca automática */
 
 setTimeout(()=>{
 mostrar()
@@ -291,9 +280,9 @@ mostrar()
 
 </script>
 
-</body>
-
 <div id="progress-bar">
   <div id="progress"></div>
 </div>
+  
+</body>
 </html>
