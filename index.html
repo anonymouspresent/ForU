@@ -51,7 +51,7 @@ body{
   background:rgba(0,0,0,0.65);
   cursor:pointer;
   transition:opacity 0.5s;
-  z-index:10;
+  z-index:30;
 }
 
 /* texto */
@@ -223,20 +223,26 @@ document.addEventListener("DOMContentLoaded", () => {
   clickLeft.addEventListener("pointerdown", voltar);
   clickRight.addEventListener("pointerdown", proximo);
 
-  // iniciar animação
-  start.addEventListener("click", () => {
+// Iniciar animação e remover a tela de início
+  start.addEventListener("pointerdown", () => {
+    // Esconde visualmente
     start.style.opacity = "0";
     start.style.pointerEvents = "none";
 
+    // Remove do processamento após a transição de fade
     setTimeout(() => {
-      start.style.display = "none"; // remove do fluxo
+      start.style.display = "none";
     }, 500);
 
-    music.play().catch(()=>{});
+    // Toca a música
+    music.play().catch((e) => console.log("Erro ao tocar música:", e));
+    
+    // Mostra as setas laterais
     indicators.forEach(i => i.classList.add("show"));
 
-    mostrar(); // chama a primeira frase
-  });
+    // Inicia a primeira frase
+    mostrar(); 
+  }, { once: true }); // O "once: true" garante que esse código só rode uma vez
 
 });
 </script>
