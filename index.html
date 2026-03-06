@@ -216,11 +216,15 @@ const frases = [
 ]
 
 let index = 0
+let timer = null
 
 const text = document.getElementById("text")
 const start = document.getElementById("start")
 const music = document.getElementById("music")
 const progress = document.getElementById("progress")
+
+const clickLeft = document.querySelector(".click-left")
+const clickRight = document.querySelector(".click-right")
 
 function mostrar(){
 
@@ -241,6 +245,8 @@ progress.style.width = "100%"
 },50)
 
 },400)
+
+reiniciarTempo()
 
 }
 
@@ -266,10 +272,23 @@ mostrar()
 
 }
 
-/* tornar acessivel no HTML */
+function reiniciarTempo(){
 
-window.proximo = proximo
-window.voltar = voltar
+clearTimeout(timer)
+
+timer = setTimeout(()=>{
+
+if(index < frases.length-1){
+index++
+mostrar()
+}
+
+},8000)
+
+}
+
+clickLeft.addEventListener("pointerdown", voltar)
+clickRight.addEventListener("pointerdown", proximo)
 
 start.addEventListener("click", () => {
 
@@ -280,19 +299,10 @@ music.play().catch(()=>{})
 document.querySelectorAll(".touch-indicator").forEach(i=>{
 i.classList.add("show")
 })
-document.querySelector(".click-left").addEventListener("click", voltar)
-document.querySelector(".click-right").addEventListener("click", proximo)
 
 setTimeout(()=>{
 mostrar()
 },1000)
-
-setInterval(()=>{
-if(index < frases.length-1){
-index++
-mostrar()
-}
-},8000)
 
 })
 
