@@ -140,8 +140,9 @@ left:0;
 width:100%;
 height:4px;
 background:rgba(255,255,255,0.15);
-z-index:10;
-overflow:white;
+z-index:3;
+overflow:hidden;
+pointer-events:none;
 }
 
 #progress{
@@ -239,6 +240,8 @@ progress.style.width = "100%"
 
 function proximo(){
 
+if(!text.innerHTML) return
+
 if(index < frases.length-1){
 index++
 mostrar()
@@ -247,6 +250,8 @@ mostrar()
 }
 
 function voltar(){
+
+if(!text.innerHTML) return
 
 if(index > 0){
 index--
