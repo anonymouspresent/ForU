@@ -6,162 +6,129 @@
 <title>Para você</title>
 
 <style>
-
 body{
-margin:0;
-padding:0;
-height:100vh;
-overflow:hidden;
+  margin:0;
+  padding:0;
+  height:100vh;
+  overflow:hidden;
 
-display:flex;
-align-items:center;
-justify-content:center;
+  display:flex;
+  align-items:center;
+  justify-content:center;
 
-font-family:Georgia,serif;
-color:white;
-text-align:center;
+  font-family:Georgia,serif;
+  color:white;
+  text-align:center;
 
-background-image:url("fundo.jpg");
-background-size:cover;
-background-position:center;
-background-repeat:no-repeat;
+  background-image:url("fundo.jpg");
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
 }
 
 /* camada escura */
-
 .overlay{
-position:absolute;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,0.45);
-z-index:1;
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.45);
+  z-index:1;
 }
 
 /* tela inicial */
-
 .start-screen{
-position:absolute;
-top:0;
-left:0;
-width:100%;
-height:100%;
-
-display:flex;
-align-items:center;
-justify-content:center;
-
-font-size:clamp(18px,3vw,26px);
-letter-spacing:2px;
-
-background:rgba(0,0,0,0.65);
-
-cursor:pointer;
-transition:opacity 1.5s;
-
-z-index:10;
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:clamp(18px,3vw,26px);
+  letter-spacing:2px;
+  background:rgba(0,0,0,0.65);
+  cursor:pointer;
+  transition:opacity 1.5s;
+  z-index:10;
 }
-
 .start-screen.hide{
-opacity:0;
-pointer-events:none;
+  opacity:0;
+  pointer-events:none;
 }
 
 /* texto */
-
 .container{
-position:relative;
-max-width:90%;
-padding:clamp(20px,4vw,40px);
-
-line-height:1.8;
-
-background:rgba(0,0,0,0.25);
-border-radius:12px;
-backdrop-filter:blur(4px);
-
-text-shadow:0 2px 15px rgba(0,0,0,0.9);
-
-opacity:0;
-transform:translateY(20px);
-transition:opacity 1.2s, transform 1.2s;
-
-z-index:2;
+  position:relative;
+  max-width:90%;
+  padding:clamp(20px,4vw,40px);
+  line-height:1.8;
+  background:rgba(0,0,0,0.25);
+  border-radius:12px;
+  backdrop-filter:blur(4px);
+  text-shadow:0 2px 15px rgba(0,0,0,0.9);
+  opacity:0;
+  transform:translateY(20px);
+  transition:opacity 1.2s, transform 1.2s;
+  z-index:2;
 }
-
 .container.show{
-opacity:1;
-transform:translateY(0);
+  opacity:1;
+  transform:translateY(0);
 }
 
 /* frase final */
-
 .final{
-font-size:clamp(28px,5vw,40px);
-letter-spacing:2px;
+  font-size:clamp(28px,5vw,40px);
+  letter-spacing:2px;
 }
 
 /* indicadores de toque */
-
 .touch-indicator{
-position:absolute;
-top:50%;
-transform:translateY(-50%);
-font-size:clamp(18px,2vw,26px);
-color:rgba(255,255,255,0.35);
-user-select:none;
-pointer-events:none;
-opacity:0;
-transition:opacity 1.5s;
-z-index:6;
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  font-size:clamp(18px,2vw,26px);
+  color:rgba(255,255,255,0.35);
+  user-select:none;
+  pointer-events:none;
+  opacity:0;
+  transition:opacity 1.5s;
+  z-index:6;
 }
+.touch-indicator.left{ left:3%; }
+.touch-indicator.right{ right:3%; }
+.touch-indicator.show{ opacity:0.6; }
 
-.touch-indicator.left{
-left:3%;
-}
-
-.touch-indicator.right{
-right:3%;
-}
-
-/* aparecem depois que começa */
-
-.touch-indicator.show{
-opacity:0.6;
-}
-  
 /* barra de progresso */
-  
 #progress-bar{
-position:absolute;
-bottom:0;
-left:0;
-width:100%;
-height:4px;
-background:rgba(255,255,255,0.15);
-z-index:3;
-overflow:hidden;
-pointer-events:none;
+  position:absolute;
+  bottom:0;
+  left:0;
+  width:100%;
+  height:4px;
+  background:rgba(255,255,255,0.15);
+  z-index:3;
+  overflow:hidden;
+  pointer-events:none;
 }
-
 #progress{
-height:100%;
-width:0%;
-background:white;
+  height:100%;
+  width:0%;
+  background:white;
 }
 
 /* áreas de clique */
-
 .click-zone{
-position:absolute;
-top:0;
-height:100%;
-width:50%;
-z-index:20;
-cursor:pointer;
+  position:absolute;
+  top:0;
+  height:100%;
+  width:50%;
+  z-index:20;
+  cursor:pointer;
 }
-
 .click-left{ left:0; }
 .click-right{ right:0; }
 
@@ -184,7 +151,7 @@ cursor:pointer;
 <div class="click-zone click-right"></div>
 
 <audio id="music" loop>
-<source src="musica.mp3" type="audio/mpeg">
+  <source src="musica.mp3" type="audio/mpeg">
 </audio>
 
 <div id="progress-bar">
@@ -192,122 +159,92 @@ cursor:pointer;
 </div>
   
 <script>
+document.addEventListener("DOMContentLoaded", () => {
 
-document.addEventListener("DOMContentLoaded", function(){
+  const frases = [
+    "Dizem que a lua tem um brilho que chama atenção mesmo de longe.",
+    "Mas, sendo sincero, o seu sorriso consegue fazer exatamente isso comigo.",
+    "Seus olhos castanhos carregam uma calma que lembra o pôr do sol, quentes, intensos e difíceis de ignorar.",
+    "Talvez eu esteja exagerando…",
+    "Mas, se for pra comparar você com algo grandioso, eu escolheria tudo aquilo que faz a gente parar por alguns segundos só pra admirar.",
+    "Existem coisas no mundo que não passam despercebidas:<br><br>a imensidão do mar,<br>o brilho da lua,<br>o silêncio bonito de um pôr do sol.",
+    "E, de algum jeito, você entra nessa lista.",
+    "<span class='final'>✨ Para você</span>"
+  ];
 
-const frases = [
+  let index = 0;
+  let timer = null;
 
-"Dizem que a lua tem um brilho que chama atenção mesmo de longe.",
+  const text = document.getElementById("text");
+  const start = document.getElementById("start");
+  const music = document.getElementById("music");
+  const progress = document.getElementById("progress");
 
-"Mas, sendo sincero, o seu sorriso consegue fazer exatamente isso comigo.",
+  const clickLeft = document.querySelector(".click-left");
+  const clickRight = document.querySelector(".click-right");
 
-"Seus olhos castanhos carregam uma calma que lembra o pôr do sol, quentes, intensos e difíceis de ignorar.",
+  // Função que mostra a frase atual
+  const mostrar = () => {
+    text.classList.remove("show");
 
-"Talvez eu esteja exagerando…",
+    progress.style.transition = "none";
+    progress.style.width = "0%";
 
-"Mas, se for pra comparar você com algo grandioso, eu escolheria tudo aquilo que faz a gente parar por alguns segundos só pra admirar.",
+    setTimeout(() => {
+      text.innerHTML = frases[index];
+      text.classList.add("show");
 
-"Existem coisas no mundo que não passam despercebidas:<br><br>a imensidão do mar,<br>o brilho da lua,<br>o silêncio bonito de um pôr do sol.",
+      setTimeout(() => {
+        progress.style.transition = "width 8s linear";
+        progress.style.width = "100%";
+      }, 50);
+    }, 400);
 
-"E, de algum jeito, você entra nessa lista.",
+    reiniciarTempo();
+  };
 
-"<span class='final'>✨ Para você</span>"
+  // Avançar frase
+  const proximo = () => {
+    if(index < frases.length - 1){
+      index++;
+      mostrar();
+    }
+  };
 
-]
+  // Voltar frase
+  const voltar = () => {
+    if(index > 0){
+      index--;
+      mostrar();
+    }
+  };
 
-let index = 0
-let timer = null
+  // Reinicia o timer automático
+  const reiniciarTempo = () => {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      if(index < frases.length - 1){
+        index++;
+        mostrar();
+      }
+    }, 8000);
+  };
 
-const text = document.getElementById("text")
-const start = document.getElementById("start")
-const music = document.getElementById("music")
-const progress = document.getElementById("progress")
+  // Eventos de clique
+  clickLeft.addEventListener("pointerdown", voltar);
+  clickRight.addEventListener("pointerdown", proximo);
 
-const clickLeft = document.querySelector(".click-left")
-const clickRight = document.querySelector(".click-right")
+  // Iniciar animação
+  start.addEventListener("click", () => {
+    start.classList.add("hide");
+    music.play().catch(()=>{});
 
-function mostrar(){
+    document.querySelectorAll(".touch-indicator").forEach(i => i.classList.add("show"));
 
-text.classList.remove("show")
+    setTimeout(()=>{ mostrar(); }, 500);
+  });
 
-progress.style.transition = "none"
-progress.style.width = "0%"
-
-setTimeout(()=>{
-
-text.innerHTML = frases[index]
-
-text.classList.add("show")
-
-setTimeout(()=>{
-progress.style.transition = "width 8s linear"
-progress.style.width = "100%"
-},50)
-
-},400)
-
-reiniciarTempo()
-
-}
-
-function proximo(){
-
-if(!text.innerHTML) return
-
-if(index < frases.length-1){
-index++
-mostrar()
-}
-
-}
-
-function voltar(){
-
-if(!text.innerHTML) return
-
-if(index > 0){
-index--
-mostrar()
-}
-
-}
-
-function reiniciarTempo(){
-
-clearTimeout(timer)
-
-timer = setTimeout(()=>{
-
-if(index < frases.length-1){
-index++
-mostrar()
-}
-
-},8000)
-
-}
-
-clickLeft.addEventListener("pointerdown", voltar)
-clickRight.addEventListener("pointerdown", proximo)
-
-start.addEventListener("click", () => {
-
-start.classList.add("hide")
-
-music.play().catch(()=>{})
-
-document.querySelectorAll(".touch-indicator").forEach(i=>{
-i.classList.add("show")
-})
-
-setTimeout(()=>{
-mostrar()
-},1000)
-
-})
-
-})
-
+});
 </script>
   
 </body>
