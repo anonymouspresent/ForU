@@ -102,12 +102,11 @@ letter-spacing:2px;
 /* áreas de clique */
 
 .click-zone{
-cursor:default;
+cursor:pointer;
 position:absolute;
 top:0;
 height:100%;
 width:50%;
-pointer-events:none;
 z-index:5;
 }
 
@@ -203,8 +202,6 @@ start.classList.add("hide")
 music.play().catch(()=>{})
 
 /* ativa cliques depois de iniciar */
-
-document.querySelectorAll(".click-zone").forEach(z=>{z.style.pointerEvents = "auto"})
 
 setTimeout(()=>{
 mostrar()
