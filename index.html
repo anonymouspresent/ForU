@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Para você</title>
-
 <style>
 body{
   margin:0;
@@ -51,12 +50,8 @@ body{
   letter-spacing:2px;
   background:rgba(0,0,0,0.65);
   cursor:pointer;
-  transition:opacity 1.5s;
+  transition:opacity 0.5s;
   z-index:10;
-}
-.start-screen.hide{
-  opacity:0;
-  pointer-events:none;
 }
 
 /* texto */
@@ -134,7 +129,6 @@ body{
 
 </style>
 </head>
-
 <body>
 
 <div class="overlay"></div>
@@ -157,7 +151,7 @@ body{
 <div id="progress-bar">
   <div id="progress"></div>
 </div>
-  
+
 <script>
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -179,14 +173,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const start = document.getElementById("start");
   const music = document.getElementById("music");
   const progress = document.getElementById("progress");
-
   const clickLeft = document.querySelector(".click-left");
   const clickRight = document.querySelector(".click-right");
+  const indicators = document.querySelectorAll(".touch-indicator");
 
-  // Função que mostra a frase atual
   const mostrar = () => {
     text.classList.remove("show");
-
     progress.style.transition = "none";
     progress.style.width = "0%";
 
@@ -203,7 +195,6 @@ document.addEventListener("DOMContentLoaded", () => {
     reiniciarTempo();
   };
 
-  // Avançar frase
   const proximo = () => {
     if(index < frases.length - 1){
       index++;
@@ -211,7 +202,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  // Voltar frase
   const voltar = () => {
     if(index > 0){
       index--;
@@ -219,7 +209,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  // Reinicia o timer automático
   const reiniciarTempo = () => {
     clearTimeout(timer);
     timer = setTimeout(() => {
@@ -230,22 +219,26 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 8000);
   };
 
-  // Eventos de clique
+  // eventos de clique
   clickLeft.addEventListener("pointerdown", voltar);
   clickRight.addEventListener("pointerdown", proximo);
 
-  // Iniciar animação
-start.addEventListener("click", () => {
-    start.style.opacity = "0";       // desaparece visualmente
-    start.style.pointerEvents = "none"; // não atrapalha cliques
+  // iniciar animação
+  start.addEventListener("click", () => {
+    start.style.opacity = "0";
+    start.style.pointerEvents = "none";
 
     setTimeout(() => {
-        start.style.display = "none"; // remove totalmente depois da transição
-    }, 500); // 500ms igual à duração da transição
+      start.style.display = "none"; // remove do fluxo
+    }, 500);
+
+    music.play().catch(()=>{});
+    indicators.forEach(i => i.classList.add("show"));
+
+    mostrar(); // chama a primeira frase
   });
 
 });
 </script>
-  
 </body>
 </html>
