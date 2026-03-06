@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Para você</title>
+
+<style>
+
+body{
+margin:0;
+padding:0;
+height:100vh;
+overflow:hidden;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+font-family: Georgia, serif;
+color:white;
+text-align:center;
+
+background-image:url("fundo.jpg");
+background-size:cover;
+background-position:center;
+background-repeat:no-repeat;
+}
+
+.overlay{
+position:absolute;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.45);
+}
+
+.container{
+position:relative;
+max-width:80%;
+font-size:22px;
+line-height:1.7;
+
+text-shadow:0 2px 10px rgba(0,0,0,0.8);
+
+opacity:0;
+transition:opacity 1.5s;
+}
+
+.container.show{
+opacity:1;
+}
+
+.click-zone{
+position:absolute;
+top:0;
+height:100%;
+width:50%;
+}
+
+.left{
+left:0;
+}
+
+.right{
+right:0;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="overlay"></div>
+
+<div class="container" id="text"></div>
+
+<div class="click-zone left" onclick="voltar()"></div>
+<div class="click-zone right" onclick="proximo()"></div>
+
+<audio autoplay loop>
+<source src="musica.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+
+const frases = [
+
+"Dizem que a lua tem um brilho que chama atenção mesmo de longe.",
+
+"Mas, sendo sincero, o seu sorriso consegue fazer exatamente isso comigo.",
+
+"Seus olhos castanhos carregam uma calma que lembra o pôr do sol — quentes, intensos e difíceis de ignorar.",
+
+"Talvez eu esteja exagerando…",
+
+"Mas, se for pra comparar você com algo grandioso, eu escolheria tudo aquilo que faz a gente parar por alguns segundos só pra admirar.",
+
+"Existem coisas no mundo que não passam despercebidas:<br><br>a imensidão do mar,<br>o brilho da lua,<br>o silêncio bonito de um pôr do sol.",
+
+"E, de algum jeito, você entra nessa lista.",
+
+"✨ Para você"
+
+]
+
+let index = 0
+const text = document.getElementById("text")
+
+function mostrar(){
+
+text.classList.remove("show")
+
+setTimeout(()=>{
+
+text.innerHTML = frases[index]
+
+text.classList.add("show")
+
+},400)
+
+}
+
+function proximo(){
+
+if(index < frases.length-1){
+
+index++
+
+mostrar()
+
+}
+
+}
+
+function voltar(){
+
+if(index > 0){
+
+index--
+
+mostrar()
+
+}
+
+}
+
+mostrar()
+
+</script>
+
+</body>
+</html>
