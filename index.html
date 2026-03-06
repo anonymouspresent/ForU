@@ -162,8 +162,8 @@ z-index:20;
 cursor:pointer;
 }
 
-.left{ left:0; }
-.right{ right:0; }
+.click-left{ left:0; }
+.click-right{ right:0; }
 
 </style>
 </head>
@@ -180,8 +180,8 @@ cursor:pointer;
 <div class="touch-indicator left">‹</div>
 <div class="touch-indicator right">›</div>
 
-<div class="click-zone left"></div>
-<div class="click-zone right"></div>
+<div class="click-zone click-left"></div>
+<div class="click-zone click-right"></div>
 
 <audio id="music" loop>
 <source src="musica.mp3" type="audio/mpeg">
@@ -280,8 +280,8 @@ music.play().catch(()=>{})
 document.querySelectorAll(".touch-indicator").forEach(i=>{
 i.classList.add("show")
 })
-document.querySelector(".click-zone.left").addEventListener("click", voltar)
-document.querySelector(".click-zone.right").addEventListener("click", proximo)
+document.querySelector(".click-left").addEventListener("click", voltar)
+document.querySelector(".click-right").addEventListener("click", proximo)
 
 setTimeout(()=>{
 mostrar()
