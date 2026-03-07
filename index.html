@@ -192,9 +192,9 @@ body::after {
 
 #btn-ler-tudo {
   margin-top: 20px;
-  padding: 12px 25px; /* Aumentei um pouco para facilitar o toque */
-  background: rgba(255, 255, 255, 0.1); /* Um fundo leve para destacar */
-  border: 1px solid white;
+  padding: 12px 25px;
+  background: rgba(255, 255, 255, 0.2); /* Um pouco mais de brilho */
+  border: 2px solid white; /* Borda levemente mais grossa para o toque */
   color: white;
   border-radius: 30px;
   cursor: pointer;
@@ -202,10 +202,10 @@ body::after {
   transition: opacity 1s;
   font-family: Georgia, serif;
   
-  /* O SEGREDO ESTÁ AQUI: */
+  /* AQUI ESTÁ A CHAVE: */
   position: relative; 
-  z-index: 100; /* Maior que o z-index das click-zones que é 20 */
-  pointer-events: auto; /* Garante que ele aceite o clique */
+  z-index: 999 !important; /* Valor muito alto para garantir topo */
+  pointer-events: all !important; /* Força o recebimento do clique */
 }
 
 #btn-ler-tudo.show { opacity: 1; }
@@ -289,41 +289,53 @@ document.addEventListener("DOMContentLoaded", () => {
   const indicators = document.querySelectorAll(".touch-indicator");
   const btnLerTudo = document.getElementById("btn-ler-tudo");
 
-  const mostrar = () => {
-    text.classList.remove("show");
-    btnLerTudo.classList.remove("show");
-    
-    // Reset da barra de progresso
-    progress.style.transition = "none";
-    progress.style.width = "0%";
+const mostrar = () => {
+  text.classList.remove("show");
+  btnLerTudo.classList.remove("show");
+  
+  // Reset da barra de progresso
+  progress.style.transition = "none";
+  progress.style.width = "0%";
 
+  setTimeout(() => {
+    text.innerHTML = frases[index];
+    text.classList.add("show");
+
+    // Animação da barra
     setTimeout(() => {
-      text.innerHTML = frases[index];
-      text.classList.add("show");
+      progress.style.transition = "width 8s linear";
+      progress.style.width = "100%";
+    }, 50);
 
-      // Inicia a animação da barra
+    // SE FOR A ÚLTIMA FRASE:
+    if (index === frases.length - 1) {
       setTimeout(() => {
-        progress.style.transition = "width 8s linear";
-        progress.style.width = "100%";
-      }, 50);
+        // Remove as click-zones para elas não atrapalharem o botão
+        document.querySelector(".click-left").style.display = "none";
+        document.querySelector(".click-right").style.display = "none";
 
-// Se for a última frase, mostra o botão de ler tudo
-      if (index === frases.length - 1) {
-        setTimeout(() => {
-          btnLerTudo.classList.add("show");
-          text.appendChild(btnLerTudo); 
+        btnLerTudo.classList.add("show");
+        text.appendChild(btnLerTudo); 
 
-          // Garante que o clique funcione no mobile sem conflito
-          btnLerTudo.addEventListener("pointerdown", (e) => {
-            e.stopPropagation(); // Impede que o clique passe para a zona de baixo
-            abrirMensagem();
-          });
-        }, 2000);
-      }
-    }, 400);
+        // Eventos para garantir que funcione em qualquer celular
+        btnLerTudo.onpointerdown = (e) => {
+          e.stopPropagation();
+          abrirMensagem();
+        };
+        btnLerTudo.onclick = (e) => {
+          e.stopPropagation();
+          abrirMensagem();
+        };
+      }, 2000);
+    } else {
+      // Se ele voltou da última para a penúltima, as click-zones voltam
+      document.querySelector(".click-left").style.display = "block";
+      document.querySelector(".click-right").style.display = "block";
+    }
+  }, 400);
 
-    reiniciarTempo();
-  };
+  reiniciarTempo();
+};
 
   const proximo = () => { if(index < frases.length - 1){ index++; mostrar(); } };
   const voltar = () => { if(index > 0){ index--; mostrar(); } };
