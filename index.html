@@ -181,31 +181,39 @@ body::after {
 
 .message-box {
   background: rgba(255, 255, 255, 0.05);
-  padding: 30px;
+  padding: clamp(15px, 4vw, 25px); /* Padding adaptável */
   border-radius: 20px;
   border: 1px solid rgba(255, 255, 255, 0.2);
-  max-width: 500px;
-  line-height: 2;
-  font-size: 18px;
-  text-align: left; /* Estilo de carta */
+  width: 90%;
+  max-width: 450px;
+  line-height: 1.4; /* Espaçamento menor para caber mais texto */
+  font-size: clamp(14px, 3.5vw, 16px); /* Fonte diminui em telas menores */
+  text-align: left;
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
 }
 
 #btn-ler-tudo {
   margin-top: 20px;
   padding: 12px 25px;
-  background: rgba(255, 255, 255, 0.2); /* Um pouco mais de brilho */
-  border: 2px solid white; /* Borda levemente mais grossa para o toque */
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid white;
   color: white;
   border-radius: 30px;
   cursor: pointer;
   opacity: 0;
   transition: opacity 1s;
   font-family: Georgia, serif;
-  
-  /* AQUI ESTÁ A CHAVE: */
   position: relative; 
-  z-index: 999 !important; /* Valor muito alto para garantir topo */
-  pointer-events: all !important; /* Força o recebimento do clique */
+  z-index: 999 !important;
+  /* MUDANÇA AQUI: Impede cliques enquanto estiver invisível */
+  pointer-events: none; 
+}
+
+/* Quando o botão ganha a classe .show, ele passa a aceitar cliques */
+#btn-ler-tudo.show { 
+  opacity: 1; 
+  pointer-events: auto; 
 }
 
 #btn-ler-tudo.show { opacity: 1; }
@@ -259,7 +267,8 @@ function abrirMensagem() {
     "E, de algum jeito, você entra nessa lista.",
     "✨ Só queria te lembrar o quanto você é incrível."
   ];
-  const textoFormatado = frasesParaCarta.join('<br><br>');
+  // Usamos apenas um <br> simples para não ocupar muito espaço vertical
+  const textoFormatado = frasesParaCarta.join('<br><br>'); 
   document.getElementById("texto-inteiro").innerHTML = textoFormatado;
   document.getElementById("full-message").style.display = 'flex';
 }
