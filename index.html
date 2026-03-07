@@ -242,6 +242,23 @@ body::after {
 </div>
 
 <script>
+// Colocamos as funções de abrir mensagem fora para o botão HTML as encontrar
+function abrirMensagem() {
+  const frasesParaCarta = [
+    "Dizem que a lua tem um brilho que chama atenção mesmo de longe.",
+    "Mas, sendo sincero, o seu sorriso consegue fazer exatamente isso comigo.",
+    "Seus olhos castanhos carregam uma calma que lembra o pôr do sol, quentes, intensos e difíceis de ignorar.",
+    "Talvez eu esteja exagerando…",
+    "Mas, se for pra comparar você com algo grandioso, eu escolheria tudo aquilo que faz a gente parar por alguns segundos só pra admirar.",
+    "Existem coisas no mundo que não passam despercebidas: a imensidão do mar, o brilho da lua, o silêncio bonito de um pôr do sol.",
+    "E, de algum jeito, você entra nessa lista.",
+    "✨ Só queria te lembrar o quanto você é incrível."
+  ];
+  const textoFormatado = frasesParaCarta.join('<br><br>');
+  document.getElementById("texto-inteiro").innerHTML = textoFormatado;
+  document.getElementById("full-message").style.display = 'flex';
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   const frases = [
     "Dizem que a lua tem um brilho que chama atenção mesmo de longe.",
@@ -265,37 +282,37 @@ document.addEventListener("DOMContentLoaded", () => {
   const clickLeft = document.querySelector(".click-left");
   const clickRight = document.querySelector(".click-right");
   const indicators = document.querySelectorAll(".touch-indicator");
+  const btnLerTudo = document.getElementById("btn-ler-tudo");
 
-  // Prepara o áudio
-  music.load();
+  const mostrar = () => {
+    text.classList.remove("show");
+    btnLerTudo.classList.remove("show");
+    
+    // Reset da barra de progresso
+    progress.style.transition = "none";
+    progress.style.width = "0%";
 
-const mostrar = () => {
-  text.classList.remove("show");
-  // Esconde o botão se não for a última frase
-  document.getElementById("btn-ler-tudo").classList.remove("show");
+    setTimeout(() => {
+      text.innerHTML = frases[index];
+      text.classList.add("show");
 
-  setTimeout(() => {
-    text.innerHTML = frases[index];
-    text.classList.add("show");
-
-    // SE FOR A ÚLTIMA FRASE:
-    if (index === frases.length - 1) {
+      // Inicia a animação da barra
       setTimeout(() => {
-        const btn = document.getElementById("btn-ler-tudo");
-        text.appendChild(btn); // Coloca o botão dentro do container de texto
-        btn.classList.add("show");
-      }, 2000); // Aparece 2 segundos depois da última frase
-    }
-    // ... resto do seu código da barra de progresso
-  }, 400);
-};
+        progress.style.transition = "width 8s linear";
+        progress.style.width = "100%";
+      }, 50);
 
-// Função para montar a mensagem completa
-function abrirMensagem() {
-  const todasFrases = frases.map(f => f.replace('<br>', ' ')).join('<br><br>');
-  document.getElementById("texto-inteiro").innerHTML = todasFrases;
-  document.getElementById("full-message").style.display = 'flex';
-}
+      // Se for a última frase, mostra o botão de ler tudo
+      if (index === frases.length - 1) {
+        setTimeout(() => {
+          btnLerTudo.classList.add("show");
+          text.appendChild(btnLerTudo); 
+        }, 2000);
+      }
+    }, 400);
+
+    reiniciarTempo();
+  };
 
   const proximo = () => { if(index < frases.length - 1){ index++; mostrar(); } };
   const voltar = () => { if(index > 0){ index--; mostrar(); } };
@@ -308,23 +325,14 @@ function abrirMensagem() {
   clickLeft.addEventListener("pointerdown", (e) => { e.stopPropagation(); if(iniciado) voltar(); });
   clickRight.addEventListener("pointerdown", (e) => { e.stopPropagation(); if(iniciado) proximo(); });
 
-const iniciarTudo = () => {
+  const iniciarTudo = () => {
     if(iniciado) return;
     iniciado = true;
 
-    // TRUQUE PARA MOBILE: Tira o mudo e dá play no mesmo instante do toque
     music.muted = false;
-    
-    const playPromise = music.play();
-
-    if (playPromise !== undefined) {
-      playPromise.then(() => {
-        console.log("Áudio rodando!");
-      }).catch(error => {
-        // Se falhar, tenta dar play de novo após 100ms
-        setTimeout(() => { music.play(); }, 100);
-      });
-    }
+    music.play().catch(error => {
+      setTimeout(() => { music.play(); }, 100);
+    });
 
     start.style.opacity = "0";
     setTimeout(() => { 
@@ -334,7 +342,6 @@ const iniciarTudo = () => {
     }, 600);
   };
 
-  // Escuta múltiplos eventos para não ter erro
   start.addEventListener("click", iniciarTudo);
   start.addEventListener("touchstart", iniciarTudo); 
 });
