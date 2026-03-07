@@ -389,6 +389,18 @@ const mostrar = () => {
   start.addEventListener("click", iniciarTudo);
   start.addEventListener("touchstart", iniciarTudo); 
 });
+
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden) {
+    // Se a aba for minimizada ou o celular bloqueado, pausa a música
+    music.pause();
+  } else {
+    // Se ela voltar para a aba e o site já tiver sido iniciado, retoma a música
+    if (iniciado) {
+      music.play().catch(err => console.log("Aguardando interação para retomar áudio"));
+    }
+  }
+});
 </script>
 
 </body>
