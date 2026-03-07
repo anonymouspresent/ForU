@@ -184,8 +184,8 @@ body::after {
 <div class="click-zone click-left"></div>
 <div class="click-zone click-right"></div>
 
-<audio id="music" loop playsinline preload="auto">
-  <source src="musica.mp3" type="audio/mpeg">
+<audio id="music" loop playsinline preload="auto" muted>
+  <source src="./musica.mp3" type="audio/mpeg">
 </audio>
 
 <div id="progress-bar">
@@ -248,25 +248,30 @@ document.addEventListener("DOMContentLoaded", () => {
   clickLeft.addEventListener("pointerdown", (e) => { e.stopPropagation(); if(iniciado) voltar(); });
   clickRight.addEventListener("pointerdown", (e) => { e.stopPropagation(); if(iniciado) proximo(); });
 
-const iniciarTudo = (e) => {
+const iniciarTudo = () => {
     if(iniciado) return;
-    
-    // 1. Comando imediato para mobile
-    music.play(); 
-    
-    // 2. Garante que se o navegador suspendeu o áudio, ele retome
-    if (music.paused) {
-        music.play();
-    }
-
     iniciado = true;
+
+    // TRUQUE PARA MOBILE: Tira o mudo e dá play no mesmo instante do toque
+    music.muted = false;
+    
+    const playPromise = music.play();
+
+    if (playPromise !== undefined) {
+      playPromise.then(() => {
+        console.log("Áudio rodando!");
+      }).catch(error => {
+        // Se falhar, tenta dar play de novo após 100ms
+        setTimeout(() => { music.play(); }, 100);
+      });
+    }
 
     start.style.opacity = "0";
     setTimeout(() => { 
-      start.style.display = "none";
+      start.style.display = "none"; 
       indicators.forEach(i => i.classList.add("show"));
       mostrar();
-    }, 500);
+    }, 600);
   };
 
   // Escuta múltiplos eventos para não ter erro
