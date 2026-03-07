@@ -192,8 +192,8 @@ body::after {
 
 #btn-ler-tudo {
   margin-top: 20px;
-  padding: 10px 20px;
-  background: transparent;
+  padding: 12px 25px; /* Aumentei um pouco para facilitar o toque */
+  background: rgba(255, 255, 255, 0.1); /* Um fundo leve para destacar */
   border: 1px solid white;
   color: white;
   border-radius: 30px;
@@ -201,6 +201,11 @@ body::after {
   opacity: 0;
   transition: opacity 1s;
   font-family: Georgia, serif;
+  
+  /* O SEGREDO ESTÁ AQUI: */
+  position: relative; 
+  z-index: 100; /* Maior que o z-index das click-zones que é 20 */
+  pointer-events: auto; /* Garante que ele aceite o clique */
 }
 
 #btn-ler-tudo.show { opacity: 1; }
@@ -302,11 +307,17 @@ document.addEventListener("DOMContentLoaded", () => {
         progress.style.width = "100%";
       }, 50);
 
-      // Se for a última frase, mostra o botão de ler tudo
+// Se for a última frase, mostra o botão de ler tudo
       if (index === frases.length - 1) {
         setTimeout(() => {
           btnLerTudo.classList.add("show");
           text.appendChild(btnLerTudo); 
+
+          // Garante que o clique funcione no mobile sem conflito
+          btnLerTudo.addEventListener("pointerdown", (e) => {
+            e.stopPropagation(); // Impede que o clique passe para a zona de baixo
+            abrirMensagem();
+          });
         }, 2000);
       }
     }, 400);
