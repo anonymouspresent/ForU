@@ -56,7 +56,12 @@ body{
 
 /* texto */
 .container{
-  position:relative;
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%, -50%)
+  translateY(20px);
+  
   max-width:90%;
   padding:clamp(20px,4vw,40px);
   line-height:1.8;
@@ -65,13 +70,13 @@ body{
   backdrop-filter:blur(4px);
   text-shadow:0 2px 15px rgba(0,0,0,0.9);
   opacity:0;
-  transform:translateY(20px);
   transition:opacity 1.2s, transform 1.2s;
   z-index:2;
 }
 .container.show{
   opacity:1;
-  transform:translateY(0);
+  transform:translate(-50%, -50%)
+  translateY(0);
 }
 
 /* frase final */
