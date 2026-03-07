@@ -168,7 +168,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let index = 0;
   let timer = null;
-  let iniciado = false; // Trava para garantir que o áudio só dispare uma vez
+  let iniciado = false;
 
   const text = document.getElementById("text");
   const start = document.getElementById("start");
@@ -178,8 +178,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const clickRight = document.querySelector(".click-right");
   const indicators = document.querySelectorAll(".touch-indicator");
 
-  // Força o carregamento do áudio para o mobile
-  music.load();
+  music.load(); // garante que o áudio esteja carregado
 
   const mostrar = () => {
     text.classList.remove("show");
@@ -209,45 +208,34 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 8000);
   };
 
-  // Eventos de clique nas zonas (SÓ FUNCIONAM APÓS O START SUMIR)
-  clickLeft.addEventListener("pointerdown", (e) => {
-    if(iniciado) voltar();
-  });
+  // Avançar/voltar apenas se já começou
+  clickLeft.addEventListener("pointerdown", () => { if(iniciado) voltar(); });
+  clickRight.addEventListener("pointerdown", () => { if(iniciado) proximo(); });
 
-  clickRight.addEventListener("pointerdown", (e) => {
-    if(iniciado) proximo();
-  });
-
-  // FUNÇÃO DE INICIALIZAÇÃO (O GESTO DO USUÁRIO)
-  const iniciarTudo = (e) => {
-    if (iniciado) return;
+  // Inicia tudo no primeiro toque em qualquer lugar da tela
+  const iniciarTudo = () => {
+    if(iniciado) return;
     iniciado = true;
 
-    // 1. Tentar tocar o áudio IMEDIATAMENTE no momento do toque
+    // Tenta tocar a música imediatamente
     const playPromise = music.play();
-    
-    if (playPromise !== undefined) {
-        playPromise.then(() => {
-            console.log("Áudio tocando!");
-        }).catch(error => {
-            console.log("Erro no áudio. Tentando novamente...", error);
-            // Tenta um fallback mudo se necessário (raro precisar)
-        });
+    if(playPromise !== undefined){
+      playPromise.catch(() => { /* fallback se precisar */ });
     }
 
-    // 2. Esconder a tela de início
+    // Esconde start-screen
     start.style.opacity = "0";
     start.style.pointerEvents = "none";
     setTimeout(() => { start.style.display = "none"; }, 500);
 
-    // 3. Mostrar elementos
+    // Mostra indicadores e primeira frase
     indicators.forEach(i => i.classList.add("show"));
     mostrar();
   };
 
-  // Escuta o toque na tela inteira para começar
-  start.addEventListener("pointerdown", iniciarTudo);
-  start.addEventListener("click", iniciarTudo); // Fallback para navegadores antigos
+  // Escuta o toque na tela inteira
+  document.body.addEventListener("pointerdown", iniciarTudo, { once: true });
+  document.body.addEventListener("touchstart", iniciarTudo, { once: true });
 });
 </script>
 </body>
