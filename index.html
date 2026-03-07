@@ -248,17 +248,19 @@ document.addEventListener("DOMContentLoaded", () => {
   clickLeft.addEventListener("pointerdown", (e) => { e.stopPropagation(); if(iniciado) voltar(); });
   clickRight.addEventListener("pointerdown", (e) => { e.stopPropagation(); if(iniciado) proximo(); });
 
-  // A MÁGICA PARA O MOBILE ESTÁ AQUI
-  const iniciarTudo = (e) => {
+const iniciarTudo = (e) => {
     if(iniciado) return;
     
-    // 1. Tenta dar o Play IMEDIATAMENTE (primeira linha da função)
-    music.play(); 
-    
-    // 2. Muda o estado
+    // Tenta tocar o áudio IMEDIATAMENTE antes de qualquer outra linha
+    music.play().then(() => {
+      console.log("Áudio destravado com sucesso!");
+    }).catch(err => {
+      console.log("O navegador ainda bloqueou. Tentando novamente...", err);
+    });
+
     iniciado = true;
 
-    // 3. Feedback visual
+    // Feedback visual
     start.style.opacity = "0";
     setTimeout(() => { 
       start.style.display = "none";
