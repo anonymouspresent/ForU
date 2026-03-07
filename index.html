@@ -151,7 +151,6 @@ body::after {
   left: 0;
   width: 100%;
   height: 100%;
-  /* Aumentei a opacidade de 0.1 para 0.4 para você conseguir enxergar melhor */
   background-image: 
     radial-gradient(circle at 20% 30%, rgba(255,255,255,0.4) 1px, transparent 1.5px),
     radial-gradient(circle at 70% 60%, rgba(255,255,255,0.4) 1px, transparent 1.5px),
@@ -159,7 +158,6 @@ body::after {
     radial-gradient(circle at 80% 80%, rgba(255,255,255,0.4) 1px, transparent 1.5px);
   background-size: 300px 300px;
   animation: stars 20s linear infinite;
-  /* O segredo está aqui: o z-index deve ser maior que o overlay (1), mas menor que o texto (2) */
   z-index: 1; 
   pointer-events: none;
 }
@@ -168,6 +166,44 @@ body::after {
   from { background-position: 0 0; }
   to { background-position: 0 -300px; }
 }
+
+/* Estilo da mensagem completa */
+#full-message {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.9); /* Fundo mais escuro para foco total */
+  display: none; /* Escondido no início */
+  align-items: center; justify-content: center;
+  z-index: 200;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.message-box {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 30px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  max-width: 500px;
+  line-height: 2;
+  font-size: 18px;
+  text-align: left; /* Estilo de carta */
+}
+
+#btn-ler-tudo {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background: transparent;
+  border: 1px solid white;
+  color: white;
+  border-radius: 30px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 1s;
+  font-family: Georgia, serif;
+}
+
+#btn-ler-tudo.show { opacity: 1; }
   
 .click-left{ left:0; }
 .click-right{ right:0; }
@@ -194,6 +230,15 @@ body::after {
 
 <div id="progress-bar">
   <div id="progress"></div>
+</div>
+
+<button id="btn-ler-tudo" onclick="abrirMensagem()">Ler mensagem completa</button>
+
+<div id="full-message" onclick="this.style.display='none'">
+  <div class="message-box">
+    <p id="texto-inteiro"></p>
+    <p style="text-align:center; font-size: 14px; opacity: 0.5;">(toque para fechar)</p>
+  </div>
 </div>
 
 <script>
@@ -282,6 +327,35 @@ const iniciarTudo = () => {
   start.addEventListener("click", iniciarTudo);
   start.addEventListener("touchstart", iniciarTudo); 
 });
+
+const mostrar = () => {
+  text.classList.remove("show");
+  // Esconde o botão se não for a última frase
+  document.getElementById("btn-ler-tudo").classList.remove("show");
+
+  setTimeout(() => {
+    text.innerHTML = frases[index];
+    text.classList.add("show");
+
+    // SE FOR A ÚLTIMA FRASE:
+    if (index === frases.length - 1) {
+      setTimeout(() => {
+        const btn = document.getElementById("btn-ler-tudo");
+        text.appendChild(btn); // Coloca o botão dentro do container de texto
+        btn.classList.add("show");
+      }, 2000); // Aparece 2 segundos depois da última frase
+    }
+    // ... resto do seu código da barra de progresso
+  }, 400);
+};
+
+// Função para montar a mensagem completa
+function abrirMensagem() {
+  const todasFrases = frases.map(f => f.replace('<br>', ' ')).join('<br><br>');
+  document.getElementById("texto-inteiro").innerHTML = todasFrases;
+  document.getElementById("full-message").style.display = 'flex';
+}
+  
 </script>
 
 </body>
