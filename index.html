@@ -269,22 +269,33 @@ document.addEventListener("DOMContentLoaded", () => {
   // Prepara o áudio
   music.load();
 
-  const mostrar = () => {
-    text.classList.remove("show");
-    progress.style.transition = "none";
-    progress.style.width = "0%";
+const mostrar = () => {
+  text.classList.remove("show");
+  // Esconde o botão se não for a última frase
+  document.getElementById("btn-ler-tudo").classList.remove("show");
 
-    setTimeout(() => {
-      text.innerHTML = frases[index];
-      text.classList.add("show");
+  setTimeout(() => {
+    text.innerHTML = frases[index];
+    text.classList.add("show");
+
+    // SE FOR A ÚLTIMA FRASE:
+    if (index === frases.length - 1) {
       setTimeout(() => {
-        progress.style.transition = "width 8s linear";
-        progress.style.width = "100%";
-      }, 50);
-    }, 400);
+        const btn = document.getElementById("btn-ler-tudo");
+        text.appendChild(btn); // Coloca o botão dentro do container de texto
+        btn.classList.add("show");
+      }, 2000); // Aparece 2 segundos depois da última frase
+    }
+    // ... resto do seu código da barra de progresso
+  }, 400);
+};
 
-    reiniciarTempo();
-  };
+// Função para montar a mensagem completa
+function abrirMensagem() {
+  const todasFrases = frases.map(f => f.replace('<br>', ' ')).join('<br><br>');
+  document.getElementById("texto-inteiro").innerHTML = todasFrases;
+  document.getElementById("full-message").style.display = 'flex';
+}
 
   const proximo = () => { if(index < frases.length - 1){ index++; mostrar(); } };
   const voltar = () => { if(index > 0){ index--; mostrar(); } };
@@ -327,35 +338,6 @@ const iniciarTudo = () => {
   start.addEventListener("click", iniciarTudo);
   start.addEventListener("touchstart", iniciarTudo); 
 });
-
-const mostrar = () => {
-  text.classList.remove("show");
-  // Esconde o botão se não for a última frase
-  document.getElementById("btn-ler-tudo").classList.remove("show");
-
-  setTimeout(() => {
-    text.innerHTML = frases[index];
-    text.classList.add("show");
-
-    // SE FOR A ÚLTIMA FRASE:
-    if (index === frases.length - 1) {
-      setTimeout(() => {
-        const btn = document.getElementById("btn-ler-tudo");
-        text.appendChild(btn); // Coloca o botão dentro do container de texto
-        btn.classList.add("show");
-      }, 2000); // Aparece 2 segundos depois da última frase
-    }
-    // ... resto do seu código da barra de progresso
-  }, 400);
-};
-
-// Função para montar a mensagem completa
-function abrirMensagem() {
-  const todasFrases = frases.map(f => f.replace('<br>', ' ')).join('<br><br>');
-  document.getElementById("texto-inteiro").innerHTML = todasFrases;
-  document.getElementById("full-message").style.display = 'flex';
-}
-  
 </script>
 
 </body>
