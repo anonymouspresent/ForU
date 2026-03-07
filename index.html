@@ -56,31 +56,37 @@ body{
 
 /* texto */
 .container{
-  position:absolute;
-  top:50%;
-  left:50%;
-  transform:translate(-50%, -50%)
-  translateY(20px);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) translateY(20px);
 
-  display: inline-block;
-  max-width:90%;
-  padding:clamp(20px,4vw,40px);
-  line-height:1.8;
-  background:rgba(0,0,0,0.25);
-  border-radius:12px;
-  backdrop-filter:blur(4px);
-  text-shadow:0 2px 15px rgba(0,0,0,0.9);
-  opacity:0;
-  transition:opacity 1.2s, transform 1.2s;
-  z-index:2;
+  /* Mudanças principais aqui: */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 
-  white-space: normal;
+  width: 85%;            /* Define uma largura fixa relativa à tela */
+  max-width: 600px;       /* Impede que fique largo demais em PCs */
+  min-height: 150px;      /* Mantém uma altura mínima para estabilidade */
+  
+  padding: clamp(25px, 5vw, 45px);
+  line-height: 1.6;
+  background: rgba(0,0,0,0.25);
+  border-radius: 20px;    /* Arredondado mais suave */
+  backdrop-filter: blur(8px);
+  text-shadow: 0 2px 15px rgba(0,0,0,0.9);
+  
+  opacity: 0;
+  transition: opacity 1.2s, transform 1.2s;
+  z-index: 2;
   text-align: center;
 }
+
 .container.show{
-  opacity:1;
-  transform:translate(-50%, -50%)
-  translateY(0);
+  opacity: 1;
+  transform: translate(-50%, -50%) translateY(0);
 }
 
 /* frase final */
