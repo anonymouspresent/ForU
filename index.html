@@ -126,7 +126,6 @@ body{
 }
 .click-left{ left:0; }
 .click-right{ right:0; }
-
 </style>
 </head>
 <body>
@@ -154,7 +153,6 @@ body{
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-
   const frases = [
     "Dizem que a lua tem um brilho que chama atenção mesmo de longe.",
     "Mas, sendo sincero, o seu sorriso consegue fazer exatamente isso comigo.",
@@ -178,8 +176,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const clickRight = document.querySelector(".click-right");
   const indicators = document.querySelectorAll(".touch-indicator");
 
-  music.load(); // garante que o áudio esteja carregado
-
+  // Função para mostrar frase e barra
   const mostrar = () => {
     text.classList.remove("show");
     progress.style.transition = "none";
@@ -203,40 +200,37 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const reiniciarTempo = () => {
     clearTimeout(timer);
-    timer = setTimeout(() => {
-      if(index < frases.length - 1) proximo();
-    }, 8000);
+    timer = setTimeout(() => { if(index < frases.length - 1) proximo(); }, 8000);
   };
 
-  // Avançar/voltar apenas se já começou
+  // Cliques nas zonas laterais
   clickLeft.addEventListener("pointerdown", () => { if(iniciado) voltar(); });
   clickRight.addEventListener("pointerdown", () => { if(iniciado) proximo(); });
 
-  // Inicia tudo no primeiro toque em qualquer lugar da tela
-  const iniciarTudo = () => {
+  // Início pelo toque
+  const iniciarTudo = async () => {
     if(iniciado) return;
     iniciado = true;
 
-    // Tenta tocar a música imediatamente
-    const playPromise = music.play();
-    if(playPromise !== undefined){
-      playPromise.catch(() => { /* fallback se precisar */ });
-    }
-
-    // Esconde start-screen
+    // Esconder tela inicial
     start.style.opacity = "0";
     start.style.pointerEvents = "none";
     setTimeout(() => { start.style.display = "none"; }, 500);
 
-    // Mostra indicadores e primeira frase
+    // Mostrar indicadores e primeira frase
     indicators.forEach(i => i.classList.add("show"));
     mostrar();
+
+    // Tocar música no mesmo toque do usuário
+    try { await music.play(); console.log("Música tocando!"); }
+    catch(err){ console.log("Erro ao tocar música:", err); }
   };
 
-  // Escuta o toque na tela inteira
-  document.body.addEventListener("pointerdown", iniciarTudo, { once: true });
-  document.body.addEventListener("touchstart", iniciarTudo, { once: true });
+  start.addEventListener("pointerdown", iniciarTudo);
+  start.addEventListener("click", iniciarTudo); // fallback
+
 });
 </script>
+
 </body>
 </html>
