@@ -191,7 +191,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const clickRight = document.querySelector(".click-right");
   const indicators = document.querySelectorAll(".touch-indicator");
 
-  // Função para mostrar frase e barra
+  // Prepara o áudio
+  music.load();
+
   const mostrar = () => {
     text.classList.remove("show");
     progress.style.transition = "none";
@@ -200,7 +202,6 @@ document.addEventListener("DOMContentLoaded", () => {
     setTimeout(() => {
       text.innerHTML = frases[index];
       text.classList.add("show");
-
       setTimeout(() => {
         progress.style.transition = "width 8s linear";
         progress.style.width = "100%";
@@ -218,32 +219,31 @@ document.addEventListener("DOMContentLoaded", () => {
     timer = setTimeout(() => { if(index < frases.length - 1) proximo(); }, 8000);
   };
 
-  // Cliques nas zonas laterais
-  clickLeft.addEventListener("pointerdown", () => { if(iniciado) voltar(); });
-  clickRight.addEventListener("pointerdown", () => { if(iniciado) proximo(); });
+  clickLeft.addEventListener("pointerdown", (e) => { e.stopPropagation(); if(iniciado) voltar(); });
+  clickRight.addEventListener("pointerdown", (e) => { e.stopPropagation(); if(iniciado) proximo(); });
 
-  // Início pelo toque
-  const iniciarTudo = async () => {
+  // A MÁGICA PARA O MOBILE ESTÁ AQUI
+  const iniciarTudo = (e) => {
     if(iniciado) return;
+    
+    // 1. Tenta dar o Play IMEDIATAMENTE (primeira linha da função)
+    music.play(); 
+    
+    // 2. Muda o estado
     iniciado = true;
 
-    // Esconder tela inicial
+    // 3. Feedback visual
     start.style.opacity = "0";
-    start.style.pointerEvents = "none";
-    setTimeout(() => { start.style.display = "none"; }, 500);
-
-    // Mostrar indicadores e primeira frase
-    indicators.forEach(i => i.classList.add("show"));
-    mostrar();
-
-    // Tocar música no mesmo toque do usuário
-    try { await music.play(); console.log("Música tocando!"); }
-    catch(err){ console.log("Erro ao tocar música:", err); }
+    setTimeout(() => { 
+      start.style.display = "none";
+      indicators.forEach(i => i.classList.add("show"));
+      mostrar();
+    }, 500);
   };
 
-  start.addEventListener("pointerdown", iniciarTudo);
-  start.addEventListener("click", iniciarTudo); // fallback
-
+  // Escuta múltiplos eventos para não ter erro
+  start.addEventListener("click", iniciarTudo);
+  start.addEventListener("touchstart", iniciarTudo); 
 });
 </script>
 
