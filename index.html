@@ -251,16 +251,16 @@ document.addEventListener("DOMContentLoaded", () => {
 const iniciarTudo = (e) => {
     if(iniciado) return;
     
-    // Tenta tocar o áudio IMEDIATAMENTE antes de qualquer outra linha
-    music.play().then(() => {
-      console.log("Áudio destravado com sucesso!");
-    }).catch(err => {
-      console.log("O navegador ainda bloqueou. Tentando novamente...", err);
-    });
+    // 1. Comando imediato para mobile
+    music.play(); 
+    
+    // 2. Garante que se o navegador suspendeu o áudio, ele retome
+    if (music.paused) {
+        music.play();
+    }
 
     iniciado = true;
 
-    // Feedback visual
     start.style.opacity = "0";
     setTimeout(() => { 
       start.style.display = "none";
