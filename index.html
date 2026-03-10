@@ -50,11 +50,22 @@ body{
 #btn-ler-tudo.show { opacity: 1; pointer-events: auto; }
 
 #btn-reiniciar {
-  margin-top: 15px; background: none; border: none; color: rgba(255,255,255,0.4);
-  cursor: pointer; font-size: 14px; opacity: 0; transition: opacity 1s;
-  pointer-events: none; text-decoration: underline;
+  margin-top: 15px;
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.6); /* Aumentei um pouco a visibilidade */
+  cursor: pointer;
+  font-size: 14px;
+  opacity: 0; /* Começa invisível */
+  transition: opacity 1s;
+  pointer-events: none;
+  text-decoration: underline;
+  font-family: Georgia, serif;
 }
-#btn-reiniciar.show { opacity: 1; pointer-events: auto; }
+#btn-reiniciar.show { 
+  opacity: 1; 
+  pointer-events: auto; 
+}
 
 #full-message {
   position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -160,9 +171,10 @@ const mostrar = () => {
       btnBack.innerHTML = "ver novamente";
       text.appendChild(btnBack);
 
-      setTimeout(() => ass.classList.add("show"), 1000);
-      setTimeout(() => btnCarta.classList.add("show"), 2500);
-      setTimeout(() => btnBack.classList.add("show"), 4000);
+      // --- AS LINHAS ABAIXO GARANTEM QUE TUDO APAREÇA ---
+      setTimeout(() => ass.classList.add("show"), 1000); // Assinatura em 1s
+      setTimeout(() => btnCarta.classList.add("show"), 2500); // Botão Ler em 2.5s
+      setTimeout(() => btnBack.classList.add("show"), 4000); // Botão Reiniciar em 4s (O QUE FALTAVA!)
 
       btnCarta.onclick = (e) => { e.stopPropagation(); abrirMensagem(); };
       btnBack.onclick = (e) => { e.stopPropagation(); reiniciar(); };
