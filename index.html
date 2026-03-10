@@ -210,14 +210,13 @@ body::after {
 
 .assinatura-principal {
   margin-top: 15px;
-  font-size: clamp(14px, 3vw, 18px);
+  font-size: clamp(16px, 4vw, 20px);
   font-style: italic;
-  opacity: 0; /* Começa invisível */
-  transition: opacity 2s ease-in; /* Aparece bem devagar para dar emoção */
-  color: rgba(255, 255, 255, 0.7);
-  letter-spacing: 1px;
+  color: rgba(255, 255, 255, 0.8);
+  opacity: 0;
+  transition: opacity 2s ease;
+  display: block;
 }
-
 .assinatura-principal.show {
   opacity: 1;
 }
@@ -340,6 +339,10 @@ const mostrar = () => {
   text.classList.remove("show");
   btnLerTudo.classList.remove("show");
   
+  // Limpa assinaturas anteriores para não acumular se a pessoa voltar/avançar
+  const assAntiga = document.querySelector(".assinatura-principal");
+  if(assAntiga) assAntiga.remove();
+
   progress.style.transition = "none";
   progress.style.width = "0%";
 
@@ -352,32 +355,34 @@ const mostrar = () => {
       progress.style.width = "100%";
     }, 50);
 
-    // SE FOR A ÚLTIMA FRASE:
+    // LÓGICA DA ÚLTIMA TELA
     if (index === frases.length - 1) {
+      // Desabilita cliques laterais
+      document.querySelector(".click-left").style.display = "none";
+      document.querySelector(".click-right").style.display = "none";
+
+      // Cria a assinatura
+      const ass = document.createElement("div");
+      ass.className = "assinatura-principal";
+      ass.innerHTML = "De Lucas para Thamires";
+      text.appendChild(ass);
+
+      // Faz a assinatura aparecer suavemente após 1 segundo
       setTimeout(() => {
-        // 1. Desabilita as zonas de clique
-        document.querySelector(".click-left").style.display = "none";
-        document.querySelector(".click-right").style.display = "none";
+        ass.classList.add("show");
+      }, 1000);
 
-        // 2. Cria e adiciona a assinatura logo abaixo da frase
-        const ass = document.createElement("div");
-        ass.className = "assinatura-principal";
-        ass.innerHTML = "De Lucas para Thamires";
-        text.appendChild(ass);
+      // Faz o botão aparecer depois da assinatura (após 2.5 segundos)
+      setTimeout(() => {
+        btnLerTudo.classList.add("show");
+        text.appendChild(btnLerTudo); 
         
-        // 3. Faz a assinatura aparecer suavemente
-        setTimeout(() => ass.classList.add("show"), 500);
-
-        // 4. Mostra o botão de ler tudo logo abaixo da assinatura
-        setTimeout(() => {
-          btnLerTudo.classList.add("show");
-          text.appendChild(btnLerTudo); 
-          
-          btnLerTudo.onpointerdown = (e) => { e.stopPropagation(); abrirMensagem(); };
-          btnLerTudo.onclick = (e) => { e.stopPropagation(); abrirMensagem(); };
-        }, 2500); // O botão aparece um pouco depois da assinatura
-      }, 1500);
+        btnLerTudo.onpointerdown = (e) => { e.stopPropagation(); abrirMensagem(); };
+        btnLerTudo.onclick = (e) => { e.stopPropagation(); abrirMensagem(); };
+      }, 2500);
+      
     } else {
+      // Se não for a última, garante que as zonas de clique existam
       document.querySelector(".click-left").style.display = "block";
       document.querySelector(".click-right").style.display = "block";
     }
