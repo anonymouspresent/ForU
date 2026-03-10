@@ -5,9 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Um pedacinho de luz</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✨</text></svg>">
-<meta property="og:title" content="Um pedacinho de luz ✨">
-<meta property="og:description" content="Fiz algo especial para você. Abre quando puder...">
-<meta property="og:image" content="fundo.jpg"> <meta name="theme-color" content="#000000">
 <style>
 body{
   margin:0; padding:0; height:100vh; overflow:hidden;
@@ -32,31 +29,32 @@ body{
   opacity: 0; transition: opacity 1.2s, transform 1.2s; z-index: 2;
 }
 .container.show{ opacity: 1; transform: translate(-50%, -50%) translateY(0); }
-.final{ font-size:clamp(28px,5vw,40px); letter-spacing:2px; }
-.touch-indicator{
-  position:absolute; top:50%; transform:translateY(-50%);
-  font-size:clamp(18px,2vw,26px); color:rgba(255,255,255,0.35);
-  user-select:none; pointer-events:none; opacity:0; transition:opacity 1.5s; z-index:6;
-}
-.touch-indicator.left{ left:3%; }
-.touch-indicator.right{ right:3%; }
-.touch-indicator.show{ opacity:0.6; }
-#progress-bar{ position:absolute; bottom:0; left:0; width:100%; height:4px; background:rgba(255,255,255,0.15); z-index:3; overflow:hidden; pointer-events:none; }
-#progress{ height:100%; width:0%; background:white; }
-.click-zone{ position:absolute; top:0; height:100%; width:50%; z-index:20; cursor:pointer; }
-.click-left{ left:0; }
-.click-right{ right:0; }
+.final{ font-size:clamp(24px,5vw,36px); letter-spacing:1px; }
 
-body::after {
-  content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-  background-image: 
-    radial-gradient(circle at 20% 30%, rgba(255,255,255,0.4) 1px, transparent 1.5px),
-    radial-gradient(circle at 70% 60%, rgba(255,255,255,0.4) 1px, transparent 1.5px),
-    radial-gradient(circle at 50% 10%, rgba(255,255,255,0.4) 1px, transparent 1.5px),
-    radial-gradient(circle at 80% 80%, rgba(255,255,255,0.4) 1px, transparent 1.5px);
-  background-size: 300px 300px; animation: stars 20s linear infinite; z-index: 1; pointer-events: none;
+#progress-bar{ position:absolute; bottom:0; left:0; width:100%; height:4px; background:rgba(255,255,255,0.15); z-index:3; overflow:hidden; }
+#progress{ height:100%; width:0%; background:white; }
+
+.click-zone{ position:absolute; top:0; height:100%; width:50%; z-index:20; cursor:pointer; }
+.click-left{ left:0; } .click-right{ right:0; }
+
+.assinatura-principal { margin-top: 15px; font-size: clamp(16px, 4vw, 20px); font-style: italic; color: rgba(255, 255, 255, 0.8); opacity: 0; transition: opacity 2s ease; }
+.assinatura-principal.show { opacity: 1; }
+.coracao { color: #ff4d4d; }
+
+#btn-ler-tudo {
+  margin-top: 25px; padding: 12px 25px; background: rgba(255, 255, 255, 0.15);
+  border: 1px solid white; color: white; border-radius: 30px; cursor: pointer;
+  opacity: 0; transition: opacity 1s; font-family: Georgia, serif;
+  z-index: 999; pointer-events: none;
 }
-@keyframes stars { from { background-position: 0 0; } to { background-position: 0 -300px; } }
+#btn-ler-tudo.show { opacity: 1; pointer-events: auto; }
+
+#btn-reiniciar {
+  margin-top: 15px; background: none; border: none; color: rgba(255,255,255,0.4);
+  cursor: pointer; font-size: 14px; opacity: 0; transition: opacity 1s;
+  pointer-events: none; text-decoration: underline;
+}
+#btn-reiniciar.show { opacity: 1; pointer-events: auto; }
 
 #full-message {
   position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -66,25 +64,9 @@ body::after {
 .message-box {
   background: rgba(255, 255, 255, 0.08); padding: 25px; border-radius: 20px;
   border: 1px solid rgba(255, 255, 255, 0.2); width: 85%; max-width: 400px;
-  box-sizing: border-box; line-height: 1.5; font-size: clamp(14px, 3.8vw, 16px);
-  text-align: left; color: white; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  box-sizing: border-box; line-height: 1.5; font-size: 15px; color: white;
 }
-.assinatura { display: block; text-align: right; margin-top: 20px; font-style: italic; opacity: 0.8; font-size: 0.9em; letter-spacing: 1px; }
-.assinatura-principal { margin-top: 15px; font-size: clamp(16px, 4vw, 20px); font-style: italic; color: rgba(255, 255, 255, 0.8); opacity: 0; transition: opacity 2s ease; display: block; }
-.assinatura-principal.show { opacity: 1; }
-.assinatura-principal span.coracao,
-.assinatura span.coracao {
-  color: #ff3336; /* Uma cor vermelha romântica para o coração */
-  font-size: 1.1em; /* Ligeiramente maior */
-  vertical-align: middle; /* Alinhamento visual melhor */
-}
-#btn-ler-tudo {
-  margin-top: 20px; padding: 12px 25px; background: rgba(255, 255, 255, 0.2);
-  border: 2px solid white; color: white; border-radius: 30px; cursor: pointer;
-  opacity: 0; transition: opacity 1s; font-family: Georgia, serif;
-  position: relative; z-index: 999 !important; pointer-events: none;
-}
-#btn-ler-tudo.show { opacity: 1; pointer-events: auto; }
+.assinatura-carta { display: block; text-align: right; margin-top: 20px; font-style: italic; opacity: 0.8; }
 </style>
 </head>
 <body>
@@ -92,37 +74,46 @@ body::after {
 <div class="overlay"></div>
 <div class="start-screen" id="start">✨ Toque na tela para começar</div>
 <div class="container" id="text"></div>
-<div class="touch-indicator left">‹</div>
-<div class="touch-indicator right">›</div>
 <div class="click-zone click-left"></div>
 <div class="click-zone click-right"></div>
-<audio id="music" loop playsinline preload="auto" muted>
+<audio id="music" loop playsinline preload="auto">
   <source src="./musica.mp3" type="audio/mpeg">
 </audio>
 <div id="progress-bar"><div id="progress"></div></div>
-<button id="btn-ler-tudo" onclick="abrirMensagem()">Ler mensagem completa</button>
+
 <div id="full-message" onclick="fecharMensagem(event)">
   <div class="message-box" onclick="event.stopPropagation()">
     <p id="texto-inteiro" style="margin: 0;"></p>
     <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.2); margin: 15px 0;">
-    <p style="text-align:center; font-size: 12px; opacity: 0.6; margin: 0;">Toque fora para fechar</p>
+    <p style="text-align:center; font-size: 12px; opacity: 0.5; margin: 0;">(toque fora para fechar)</p>
   </div>
 </div>
 
 <script>
+const frases = [
+  "Dizem que a lua tem um brilho que chama atenção mesmo de longe.",
+  "Mas, sendo sincero, o seu sorriso consegue fazer exatamente isso comigo.",
+  "Seus olhos castanhos carregam uma calma que lembra o pôr do sol, quentes, intensos e difíceis de ignorar.",
+  "Talvez eu esteja exagerando…",
+  "Mas, se for pra comparar você com algo grandioso, eu escolheria tudo aquilo que faz a gente parar por alguns segundos só pra admirar.",
+  "Existem coisas no mundo que não passam despercebidas:<br><br>a imensidão do mar,<br>o brilho da lua,<br>o silêncio bonito de um pôr do sol.",
+  "E, de algum jeito, você entra nessa lista.",
+  "<span class='final'>✨ Só queria te lembrar o quanto você é incrível.</span>"
+];
+
+let index = 0;
+let timer = null;
+let iniciado = false;
+
+const text = document.getElementById("text");
+const music = document.getElementById("music");
+const progress = document.getElementById("progress");
+
 function abrirMensagem() {
-  const frasesParaCarta = [
-    "Dizem que a lua tem um brilho que chama atenção mesmo de longe.",
-    "Mas, sendo sincero, o seu sorriso consegue fazer exatamente isso comigo.",
-    "Seus olhos castanhos carregam uma calma que lembra o pôr do sol, quentes, intensos e difíceis de ignorar.",
-    "Talvez eu esteja exagerando…",
-    "Mas, se for pra comparar você com algo grandioso, eu escolheria tudo aquilo que faz a gente parar por alguns segundos só pra admirar.",
-    "Existem coisas no mundo que não passam despercebidas: a imensidão do mar, o brilho da lua, o silêncio bonito de um pôr do sol.",
-    "E, de algum jeito, você entra nessa lista.",
-    "✨ Só queria te lembrar o quanto você é incrível.",
-    "<span class='assinatura'>De Lucas para Thamires <span class='coracao'>❤️</span></span>"
-  ];
-  document.getElementById("texto-inteiro").innerHTML = frasesParaCarta.join('<br><br>');
+  const carta = [...frases];
+  carta[7] = "✨ Só queria te lembrar o quanto você é incrível."; // remove span da carta
+  const textoFormatado = carta.join('<br><br>') + "<br><br><span class='assinatura-carta'>De Lucas para Thamires <span class='coracao'>❤️</span></span>";
+  document.getElementById("texto-inteiro").innerHTML = textoFormatado;
   document.getElementById("full-message").style.display = 'flex';
 }
 
@@ -130,95 +121,71 @@ function fecharMensagem(event) {
   if (event.target.id === "full-message") document.getElementById("full-message").style.display = 'none';
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  const frases = [
-    "Dizem que a lua tem um brilho que chama atenção mesmo de longe.",
-    "Mas, sendo sincero, o seu sorriso consegue fazer exatamente isso comigo.",
-    "Seus olhos castanhos carregam uma calma que lembra o pôr do sol, quentes, intensos e difíceis de ignorar.",
-    "Talvez eu esteja exagerando…",
-    "Mas, se for pra comparar você com algo grandioso, eu escolheria tudo aquilo que faz a gente parar por alguns segundos só pra admirar.",
-    "Existem coisas no mundo que não passam despercebidas:<br><br>a imensidão do mar,<br>o brilho da lua,<br>o silêncio bonito de um pôr do sol.",
-    "E, de algum jeito, você entra nessa lista.",
-    "<span class='final'>✨ Só queria te lembrar o quanto você é incrível.</span>"
-  ];
-
-  let index = 0;
-  let timer = null;
-  let iniciado = false;
-  const text = document.getElementById("text");
-  const music = document.getElementById("music");
-  const progress = document.getElementById("progress");
-  const btnLerTudo = document.getElementById("btn-ler-tudo");
+function reiniciar() {
+  index = 0;
+  document.querySelector(".click-left").style.display = "block";
+  document.querySelector(".click-right").style.display = "block";
+  mostrar();
+}
 
 const mostrar = () => {
   text.classList.remove("show");
-  btnLerTudo.classList.remove("show");
-  
-  const assAntiga = document.querySelector(".assinatura-principal");
-  if(assAntiga) assAntiga.remove();
-
   progress.style.transition = "none";
   progress.style.width = "0%";
+  
+  const antigas = document.querySelectorAll(".assinatura-principal, #btn-ler-tudo, #btn-reiniciar");
+  antigas.forEach(el => el.remove());
 
   setTimeout(() => {
     text.innerHTML = frases[index];
     text.classList.add("show");
     setTimeout(() => { progress.style.transition = "width 8s linear"; progress.style.width = "100%"; }, 50);
 
-    // SE FOR A ÚLTIMA FRASE:
     if (index === frases.length - 1) {
       document.querySelector(".click-left").style.display = "none";
       document.querySelector(".click-right").style.display = "none";
 
       const ass = document.createElement("div");
       ass.className = "assinatura-principal";
-      // NOVA LINHA AQUI: Com o coração envolvido por uma tag span para cor
       ass.innerHTML = "De Lucas para Thamires <span class='coracao'>❤️</span>";
       text.appendChild(ass);
 
-      // Faz a assinatura aparecer suavemente após 1 segundo
-      setTimeout(() => ass.classList.add("show"), 1000);
+      const btnCarta = document.createElement("button");
+      btnCarta.id = "btn-ler-tudo";
+      btnCarta.innerHTML = "Ler mensagem completa";
+      text.appendChild(btnCarta);
 
-      // Faz o botão aparecer depois da assinatura (após 2.5 segundos)
-      setTimeout(() => {
-        btnLerTudo.classList.add("show");
-        text.appendChild(btnLerTudo); 
-        
-        btnLerTudo.onpointerdown = (e) => { e.stopPropagation(); abrirMensagem(); };
-        btnLerTudo.onclick = (e) => { e.stopPropagation(); abrirMensagem(); };
-      }, 2500);
-      
-    } else {
-      document.querySelector(".click-left").style.display = "block";
-      document.querySelector(".click-right").style.display = "block";
+      const btnBack = document.createElement("button");
+      btnBack.id = "btn-reiniciar";
+      btnBack.innerHTML = "ver novamente";
+      text.appendChild(btnBack);
+
+      setTimeout(() => ass.classList.add("show"), 1000);
+      setTimeout(() => btnCarta.classList.add("show"), 2500);
+      setTimeout(() => btnBack.classList.add("show"), 4000);
+
+      btnCarta.onclick = (e) => { e.stopPropagation(); abrirMensagem(); };
+      btnBack.onclick = (e) => { e.stopPropagation(); reiniciar(); };
     }
   }, 400);
 
-  reiniciarTempo();
+  clearTimeout(timer);
+  timer = setTimeout(() => { if(index < frases.length - 1) { index++; mostrar(); } }, 8000);
 };
-  const proximo = () => { if(index < frases.length - 1){ index++; mostrar(); } };
-  const voltar = () => { if(index > 0){ index--; mostrar(); } };
-  const reiniciarTempo = () => { clearTimeout(timer); timer = setTimeout(() => { if(index < frases.length - 1) proximo(); }, 8000); };
 
-  document.querySelector(".click-left").addEventListener("pointerdown", (e) => { if(iniciado) voltar(); });
-  document.querySelector(".click-right").addEventListener("pointerdown", (e) => { if(iniciado) proximo(); });
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelector(".click-left").addEventListener("pointerdown", () => { if(iniciado && index > 0){ index--; mostrar(); } });
+  document.querySelector(".click-right").addEventListener("pointerdown", () => { if(iniciado && index < frases.length - 1){ index++; mostrar(); } });
 
   const iniciarTudo = () => {
     if(iniciado) return; iniciado = true;
-    music.muted = false;
-    music.play().catch(() => setTimeout(() => music.play(), 100));
+    music.muted = false; music.play();
     document.getElementById("start").style.opacity = "0";
-    setTimeout(() => { 
-      document.getElementById("start").style.display = "none"; 
-      document.querySelectorAll(".touch-indicator").forEach(i => i.classList.add("show"));
-      mostrar(); 
-    }, 600);
+    setTimeout(() => { document.getElementById("start").style.display = "none"; mostrar(); }, 600);
   };
 
   document.getElementById("start").addEventListener("click", iniciarTudo);
-  document.getElementById("start").addEventListener("touchstart", iniciarTudo);
-
-  // CORREÇÃO DA MÚSICA: Agora dentro do DOMContentLoaded onde 'music' e 'iniciado' existem
+  
   document.addEventListener("visibilitychange", () => {
     if (document.hidden) { music.pause(); } 
     else if (iniciado) { music.play().catch(() => {}); }
