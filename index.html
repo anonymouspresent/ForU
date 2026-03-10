@@ -72,6 +72,12 @@ body::after {
 .assinatura { display: block; text-align: right; margin-top: 20px; font-style: italic; opacity: 0.8; font-size: 0.9em; letter-spacing: 1px; }
 .assinatura-principal { margin-top: 15px; font-size: clamp(16px, 4vw, 20px); font-style: italic; color: rgba(255, 255, 255, 0.8); opacity: 0; transition: opacity 2s ease; display: block; }
 .assinatura-principal.show { opacity: 1; }
+.assinatura-principal span.coracao,
+.assinatura span.coracao {
+  color: #ff3336; /* Uma cor vermelha romântica para o coração */
+  font-size: 1.1em; /* Ligeiramente maior */
+  vertical-align: middle; /* Alinhamento visual melhor */
+}
 #btn-ler-tudo {
   margin-top: 20px; padding: 12px 25px; background: rgba(255, 255, 255, 0.2);
   border: 2px solid white; color: white; border-radius: 30px; cursor: pointer;
@@ -114,7 +120,7 @@ function abrirMensagem() {
     "Existem coisas no mundo que não passam despercebidas: a imensidão do mar, o brilho da lua, o silêncio bonito de um pôr do sol.",
     "E, de algum jeito, você entra nessa lista.",
     "✨ Só queria te lembrar o quanto você é incrível.",
-    "<span class='assinatura'>De Lucas para Thamires ❤️</span>"
+    "<span class='assinatura'>De Lucas para Thamires <span class='coracao'>❤️</span></span>"
   ];
   document.getElementById("texto-inteiro").innerHTML = frasesParaCarta.join('<br><br>');
   document.getElementById("full-message").style.display = 'flex';
@@ -144,42 +150,52 @@ document.addEventListener("DOMContentLoaded", () => {
   const progress = document.getElementById("progress");
   const btnLerTudo = document.getElementById("btn-ler-tudo");
 
-  const mostrar = () => {
-    text.classList.remove("show");
-    btnLerTudo.classList.remove("show");
-    const assAntiga = document.querySelector(".assinatura-principal");
-    if(assAntiga) assAntiga.remove();
+const mostrar = () => {
+  text.classList.remove("show");
+  btnLerTudo.classList.remove("show");
+  
+  const assAntiga = document.querySelector(".assinatura-principal");
+  if(assAntiga) assAntiga.remove();
 
-    progress.style.transition = "none";
-    progress.style.width = "0%";
+  progress.style.transition = "none";
+  progress.style.width = "0%";
 
-    setTimeout(() => {
-      text.innerHTML = frases[index];
-      text.classList.add("show");
-      setTimeout(() => { progress.style.transition = "width 8s linear"; progress.style.width = "100%"; }, 50);
+  setTimeout(() => {
+    text.innerHTML = frases[index];
+    text.classList.add("show");
+    setTimeout(() => { progress.style.transition = "width 8s linear"; progress.style.width = "100%"; }, 50);
 
-      if (index === frases.length - 1) {
-        document.querySelector(".click-left").style.display = "none";
-        document.querySelector(".click-right").style.display = "none";
-        const ass = document.createElement("div");
-        ass.className = "assinatura-principal";
-        ass.innerHTML = "De Lucas para Thamires ❤️";
-        text.appendChild(ass);
-        setTimeout(() => ass.classList.add("show"), 1000);
-        setTimeout(() => {
-          btnLerTudo.classList.add("show");
-          text.appendChild(btnLerTudo);
-          btnLerTudo.onpointerdown = (e) => { e.stopPropagation(); abrirMensagem(); };
-          btnLerTudo.onclick = (e) => { e.stopPropagation(); abrirMensagem(); };
-        }, 2500);
-      } else {
-        document.querySelector(".click-left").style.display = "block";
-        document.querySelector(".click-right").style.display = "block";
-      }
-    }, 400);
-    reiniciarTempo();
-  };
+    // SE FOR A ÚLTIMA FRASE:
+    if (index === frases.length - 1) {
+      document.querySelector(".click-left").style.display = "none";
+      document.querySelector(".click-right").style.display = "none";
 
+      const ass = document.createElement("div");
+      ass.className = "assinatura-principal";
+      // NOVA LINHA AQUI: Com o coração envolvido por uma tag span para cor
+      ass.innerHTML = "De Lucas para Thamires <span class='coracao'>❤️</span>";
+      text.appendChild(ass);
+
+      // Faz a assinatura aparecer suavemente após 1 segundo
+      setTimeout(() => ass.classList.add("show"), 1000);
+
+      // Faz o botão aparecer depois da assinatura (após 2.5 segundos)
+      setTimeout(() => {
+        btnLerTudo.classList.add("show");
+        text.appendChild(btnLerTudo); 
+        
+        btnLerTudo.onpointerdown = (e) => { e.stopPropagation(); abrirMensagem(); };
+        btnLerTudo.onclick = (e) => { e.stopPropagation(); abrirMensagem(); };
+      }, 2500);
+      
+    } else {
+      document.querySelector(".click-left").style.display = "block";
+      document.querySelector(".click-right").style.display = "block";
+    }
+  }, 400);
+
+  reiniciarTempo();
+};
   const proximo = () => { if(index < frases.length - 1){ index++; mostrar(); } };
   const voltar = () => { if(index > 0){ index--; mostrar(); } };
   const reiniciarTempo = () => { clearTimeout(timer); timer = setTimeout(() => { if(index < frases.length - 1) proximo(); }, 8000); };
