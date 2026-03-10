@@ -207,6 +207,20 @@ body::after {
   font-size: 0.9em;
   letter-spacing: 1px;
 }
+
+.assinatura-principal {
+  margin-top: 15px;
+  font-size: clamp(14px, 3vw, 18px);
+  font-style: italic;
+  opacity: 0; /* Começa invisível */
+  transition: opacity 2s ease-in; /* Aparece bem devagar para dar emoção */
+  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: 1px;
+}
+
+.assinatura-principal.show {
+  opacity: 1;
+}
   
 #btn-ler-tudo {
   margin-top: 20px;
@@ -326,7 +340,6 @@ const mostrar = () => {
   text.classList.remove("show");
   btnLerTudo.classList.remove("show");
   
-  // Reset da barra de progresso
   progress.style.transition = "none";
   progress.style.width = "0%";
 
@@ -334,7 +347,6 @@ const mostrar = () => {
     text.innerHTML = frases[index];
     text.classList.add("show");
 
-    // Animação da barra
     setTimeout(() => {
       progress.style.transition = "width 8s linear";
       progress.style.width = "100%";
@@ -343,25 +355,29 @@ const mostrar = () => {
     // SE FOR A ÚLTIMA FRASE:
     if (index === frases.length - 1) {
       setTimeout(() => {
-        // Remove as click-zones para elas não atrapalharem o botão
+        // 1. Desabilita as zonas de clique
         document.querySelector(".click-left").style.display = "none";
         document.querySelector(".click-right").style.display = "none";
 
-        btnLerTudo.classList.add("show");
-        text.appendChild(btnLerTudo); 
+        // 2. Cria e adiciona a assinatura logo abaixo da frase
+        const ass = document.createElement("div");
+        ass.className = "assinatura-principal";
+        ass.innerHTML = "De Lucas para Thamires";
+        text.appendChild(ass);
+        
+        // 3. Faz a assinatura aparecer suavemente
+        setTimeout(() => ass.classList.add("show"), 500);
 
-        // Eventos para garantir que funcione em qualquer celular
-        btnLerTudo.onpointerdown = (e) => {
-          e.stopPropagation();
-          abrirMensagem();
-        };
-        btnLerTudo.onclick = (e) => {
-          e.stopPropagation();
-          abrirMensagem();
-        };
-      }, 2000);
+        // 4. Mostra o botão de ler tudo logo abaixo da assinatura
+        setTimeout(() => {
+          btnLerTudo.classList.add("show");
+          text.appendChild(btnLerTudo); 
+          
+          btnLerTudo.onpointerdown = (e) => { e.stopPropagation(); abrirMensagem(); };
+          btnLerTudo.onclick = (e) => { e.stopPropagation(); abrirMensagem(); };
+        }, 2500); // O botão aparece um pouco depois da assinatura
+      }, 1500);
     } else {
-      // Se ele voltou da última para a penúltima, as click-zones voltam
       document.querySelector(".click-left").style.display = "block";
       document.querySelector(".click-right").style.display = "block";
     }
