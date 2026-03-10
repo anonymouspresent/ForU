@@ -143,7 +143,7 @@ body{
   cursor:pointer;
 }
 
-/* Efeito de brilho no fundo corrigido */
+/* Efeito de brilho no fundo */
 body::after {
   content: "";
   position: absolute;
@@ -198,6 +198,16 @@ body::after {
   box-shadow: 0 10px 30px rgba(0,0,0,0.5);
 }
 
+.assinatura {
+  display: block;
+  text-align: right;
+  margin-top: 20px;
+  font-style: italic;
+  opacity: 0.8;
+  font-size: 0.9em;
+  letter-spacing: 1px;
+}
+  
 #btn-ler-tudo {
   margin-top: 20px;
   padding: 12px 25px;
@@ -271,8 +281,10 @@ function abrirMensagem() {
     "Mas, se for pra comparar você com algo grandioso, eu escolheria tudo aquilo que faz a gente parar por alguns segundos só pra admirar.",
     "Existem coisas no mundo que não passam despercebidas: a imensidão do mar, o brilho da lua, o silêncio bonito de um pôr do sol.",
     "E, de algum jeito, você entra nessa lista.",
-    "✨ Só queria te lembrar o quanto você é incrível."
+    "✨ Só queria te lembrar o quanto você é incrível.",
+    "<span class='assinatura'>De Lucas para Thamires ❤️</span>" // Sua assinatura aqui
   ];
+  
   const textoFormatado = frasesParaCarta.join('<br><br>');
   document.getElementById("texto-inteiro").innerHTML = textoFormatado;
   document.getElementById("full-message").style.display = 'flex';
