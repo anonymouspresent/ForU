@@ -67,40 +67,50 @@ body{
   pointer-events: auto; 
 }
 
-/* Fundo da mensagem completa */
 #full-message {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
   background: rgba(0, 0, 0, 0.95);
   display: none;
-  align-items: flex-start; /* Alinha no topo para permitir scroll natural */
+  align-items: center; /* Centraliza perfeitamente */
   justify-content: center;
   z-index: 9999;
   backdrop-filter: blur(10px);
-  overflow-y: auto; /* ATENÇÃO: Isso permite a rolagem vertical */
-  padding: 40px 0; /* Espaço para a carta não encostar no topo/fundo */
+  overflow: hidden; /* PROÍBE a barra de rolagem */
 }
 
-/* Caixa da carta */
 .message-box {
   background: rgba(255, 255, 255, 0.08);
-  padding: 25px;
+  padding: clamp(15px, 4vw, 25px); /* Padding reduzido para ganhar espaço */
   border-radius: 20px;
   border: 1px solid rgba(255, 255, 255, 0.2);
-  width: 88%; 
+  width: 90%; 
   max-width: 400px;
-  box-sizing: border-box; 
-  line-height: 1.6;
-  font-size: clamp(14px, 4vw, 16px);
+  box-sizing: border-box;
+  
+  /* AJUSTE DE FONTE: */
+  line-height: 1.35; /* Espaçamento entre linhas mais compacto */
+  font-size: clamp(12px, 3.5vw, 15px); /* Diminui a fonte em telas pequenas */
+  
   text-align: left;
   color: white;
-  margin: auto; /* Garante centralização mesmo com o flex-start */
   box-shadow: 0 10px 30px rgba(0,0,0,0.5);
 }
-.assinatura-carta { display: block; text-align: right; margin-top: 20px; font-style: italic; opacity: 0.8; }
+
+/* Ajuste fino nos parágrafos da carta para não criar buracos grandes */
+.message-box p#texto-inteiro {
+  margin: 0;
+}
+
+.assinatura-carta {
+  display: block;
+  text-align: right;
+  margin-top: 10px; /* Margem menor */
+  font-style: italic;
+  font-size: 0.9em;
+  opacity: 0.8;
+}
 </style>
 </head>
 <body>
@@ -145,9 +155,23 @@ const progress = document.getElementById("progress");
 
 function abrirMensagem() {
   const carta = [...frases];
-  carta[7] = "✨ Só queria te lembrar o quanto você é incrível."; // remove span da carta
-  const textoFormatado = carta.join('<br><br>') + "<br><br><span class='assinatura-carta'>De Lucas para Thamires <span class='coracao'>❤️</span></span>";
-  document.getElementById("texto-inteiro").innerHTML = textoFormatado;
+  // Removemos a tag <span class='final'> da última frase para não desfigurar o layout da carta
+  carta[7] = "✨ Só queria te lembrar o quanto você é incrível."; 
+
+  // Usamos apenas UM <br> para separar, ou dois <br> com fonte pequena
+  const textoFormatado = carta.join('<br><br>') + 
+    "<br><br><span class='assinatura-carta'>De Lucas para Thamires <span class='coracao'>❤️</span></span>";
+  
+  const campoTexto = document.getElementById("texto-inteiro");
+  campoTexto.innerHTML = textoFormatado;
+  
+  // Ajuste de segurança: se mesmo assim o texto for grande, 
+  // diminuímos a fonte um pouco mais via código
+  if (window.innerHeight < 600) {
+      campoTexto.parentElement.style.fontSize = "12px";
+      campoTexto.parentElement.style.lineHeight = "1.2";
+  }
+
   document.getElementById("full-message").style.display = 'flex';
 }
 
