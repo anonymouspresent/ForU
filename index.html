@@ -113,18 +113,6 @@ body{
   margin: 0;
 }
 
-#btn-inicio {
-  margin-top: 20px;
-  padding: 10px 22px;
-  background: rgba(255, 255, 255, 0.15);
-  border: 1px solid white;
-  color: white;
-  border-radius: 30px;
-  cursor: pointer;
-  font-family: Georgia, serif;
-  backdrop-filter: blur(5px);
-}
-  
 .assinatura-carta {
   display: block;
   text-align: right;
@@ -157,7 +145,6 @@ body{
 
 <script>
 const frases = [
-  "Se você voltou aqui… eu deixei algo aqui pra você.<br><br><button id='btn-inicio'>Ler</button>",
   "Dizem que a lua tem um brilho que chama atenção mesmo de longe.",
   "Mas, sendo sincero, o seu sorriso consegue fazer exatamente isso comigo.",
   "Seus olhos castanhos carregam uma calma que lembra o pôr do sol, quentes, intensos e difíceis de ignorar.",
@@ -211,14 +198,6 @@ function reiniciar() {
 
 const mostrar = () => {
   text.classList.remove("show");
-  // Botão da mensagem inicial
-const btnInicio = document.getElementById("btn-inicio");
-if (btnInicio) {
-  btnInicio.onclick = (e) => {
-    e.stopPropagation();
-    abrirMensagem();
-  };
-}
   progress.style.transition = "none";
   progress.style.width = "0%";
   
