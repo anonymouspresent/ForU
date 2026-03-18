@@ -113,6 +113,28 @@ body{
   margin: 0;
 }
 
+/* Estilo específico para o balão de desabafo */
+#desabafo-screen {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.9);
+  display: none; align-items: center; justify-content: center;
+  z-index: 10000; backdrop-filter: blur(15px);
+}
+
+.desabafo-box {
+  width: 85%; max-width: 350px;
+  padding: 30px; border-radius: 15px;
+  background: rgba(255, 255, 255, 0.05);
+  border-left: 3px solid rgba(255, 255, 255, 0.3);
+  font-style: italic; line-height: 1.8; color: #ddd;
+}
+
+#btn-prosseguir {
+  margin-top: 25px; background: white; color: black;
+  border: none; padding: 10px 20px; border-radius: 20px;
+  font-family: Georgia, serif; cursor: pointer; font-weight: bold;
+}
+  
 .assinatura-carta {
   display: block;
   text-align: right;
@@ -127,6 +149,22 @@ body{
 
 <div class="overlay"></div>
 <div class="start-screen" id="start">✨ Toque na tela para começar</div>
+<div id="interludio" class="container" style="display:none; opacity:1;">
+  <p>Se você voltou aqui...<br>tem algo que talvez devesse ler.</p>
+  <button id="btn-ler-desabafo" style="margin-top:20px; padding:10px 20px; background:none; border:1px solid white; color:white; border-radius:20px; cursor:pointer;">Ler mensagem</button>
+</div>
+
+<div id="desabafo-screen">
+  <div class="desabafo-box">
+    "Sinto muito por ter me afastado.<br>
+    Mas chegou um momento em que eu não podia mais insistir sozinho.<br><br>
+    Foi difícil tomar essa decisão, mas eu tentei até onde conseguia sem me quebrar.<br>
+    Talvez não tenha sido suficiente, mas foi tudo o que eu podia oferecer.<br><br>
+    Sinto muito."
+    <br>
+    <button id="btn-prosseguir">Continuar</button>
+  </div>
+</div>
 <div class="container" id="text"></div>
 <div class="click-zone click-left"></div>
 <div class="click-zone click-right"></div>
@@ -246,20 +284,33 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelector(".click-left").addEventListener("pointerdown", () => { if(iniciado && index > 0){ index--; mostrar(); } });
   document.querySelector(".click-right").addEventListener("pointerdown", () => { if(iniciado && index < frases.length - 1){ index++; mostrar(); } });
 
-  const iniciarTudo = () => {
-    if(iniciado) return; iniciado = true;
-    music.muted = false; music.play();
-    document.getElementById("start").style.opacity = "0";
-    setTimeout(() => { document.getElementById("start").style.display = "none"; mostrar(); }, 600);
-  };
-
-  document.getElementById("start").addEventListener("click", iniciarTudo);
+const iniciarTudo = () => {
+  if(iniciado) return; 
+  iniciado = true;
+  music.muted = false; 
+  music.play();
   
-  document.addEventListener("visibilitychange", () => {
-    if (document.hidden) { music.pause(); } 
-    else if (iniciado) { music.play().catch(() => {}); }
-  });
-});
+  // Esconde o "Toque para começar"
+  document.getElementById("start").style.opacity = "0";
+  setTimeout(() => { 
+    document.getElementById("start").style.display = "none"; 
+    // Em vez de ir para mostrar(), mostra o INTERLÚDIO
+    document.getElementById("interludio").style.display = "flex";
+  }, 600);
+};
+
+// Clique no botão "Ler mensagem" do interlúdio
+document.getElementById("btn-ler-desabafo").onclick = () => {
+  document.getElementById("interludio").style.display = "none";
+  document.getElementById("desabafo-screen").style.display = "flex";
+};
+
+// Clique no botão "Continuar" dentro do balão de desabafo
+document.getElementById("btn-prosseguir").onclick = () => {
+  document.getElementById("desabafo-screen").style.display = "none";
+  // Agora sim, começa a sequência original de frases
+  mostrar(); 
+};
 </script>
 </body>
 </html>
