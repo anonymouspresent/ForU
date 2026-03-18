@@ -5,6 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Um pedacinho de luz</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✨</text></svg>">
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2CB9TRSY4W"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-2CB9TRSY4W');
+</script>
+
 <style>
   body {
     margin:0; padding:0; height:100vh; overflow:hidden;
@@ -15,11 +24,10 @@
   }
   .overlay { position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1; }
   
-  /* Telas principais */
   .start-screen {
     position:fixed; top:0; left:0; width:100%; height:100%;
     display:flex; align-items:center; justify-content:center;
-    background:rgba(0,0,0,0.8); cursor:pointer; z-index:100; transition: opacity 0.6s;
+    background:rgba(0,0,0,0.85); cursor:pointer; z-index:100; transition: opacity 0.6s;
   }
 
   .container {
@@ -33,7 +41,7 @@
   #desabafo-screen {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     display: none; align-items: center; justify-content: center;
-    background: rgba(0, 0, 0, 0.9); z-index: 200; backdrop-filter: blur(15px);
+    background: rgba(0, 0, 0, 0.95); z-index: 200; backdrop-filter: blur(15px);
   }
 
   .desabafo-box {
@@ -42,7 +50,6 @@
     font-style: italic; line-height: 1.6; text-align: left;
   }
 
-  /* Botões */
   button {
     margin-top: 20px; padding: 12px 25px; background: none;
     border: 1px solid white; color: white; border-radius: 30px;
@@ -50,15 +57,12 @@
   }
   #btn-prosseguir { background: white; color: black; font-weight: bold; width: 100%; }
 
-  /* Barra de Progresso */
   #progress-bar { position:absolute; bottom:0; left:0; width:100%; height:4px; background:rgba(255,255,255,0.1); z-index:5; }
   #progress { height:100%; width:0%; background:white; transition: width 8s linear; }
 
-  /* Zonas de clique para passar frases */
   .click-zone { position:absolute; top:0; height:100%; width:50%; z-index:50; display:none; }
   .click-left { left:0; } .click-right { right:0; }
 
-  /* Estilos da Carta Final */
   #full-message {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(0, 0, 0, 0.95); display: none;
@@ -133,7 +137,6 @@ let index = 0;
 let timer = null;
 const music = document.getElementById("music");
 
-// Função para mostrar cada frase
 function mostrarFrase() {
   clearTimeout(timer);
   const container = document.getElementById("text-container");
@@ -158,7 +161,6 @@ function mostrarFrase() {
       document.getElementById("c-left").style.display = "none";
       document.getElementById("c-right").style.display = "none";
       
-      // Adiciona assinatura e botões finais
       if(!document.getElementById("final-ui")) {
         const ui = document.createElement("div");
         ui.id = "final-ui";
@@ -188,7 +190,6 @@ function abrirCarta() {
   document.getElementById("full-message").style.display = "flex";
 }
 
-// Controle de Fluxo
 document.getElementById("start").onclick = function() {
   this.style.opacity = "0";
   music.play().catch(() => {});
@@ -212,7 +213,6 @@ document.getElementById("btn-prosseguir").onclick = function() {
   mostrarFrase();
 };
 
-// Navegação manual
 document.getElementById("c-left").onclick = () => { if(index > 0) { index--; mostrarFrase(); } };
 document.getElementById("c-right").onclick = () => { if(index < frases.length - 1) { index++; mostrarFrase(); } };
 </script>
