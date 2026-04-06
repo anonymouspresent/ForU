@@ -22,199 +22,54 @@
     background-color: #000;
     background-image:url("fundo.jpg"); background-size:cover; background-position:center;
   }
-  .overlay { position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1; }
-  
-  .start-screen {
-    position:fixed; top:0; left:0; width:100%; height:100%;
-    display:flex; align-items:center; justify-content:center;
-    background:rgba(0,0,0,0.85); cursor:pointer; z-index:100; transition: opacity 0.6s;
+
+  .overlay { 
+    position:absolute; top:0; left:0; width:100%; height:100%; 
+    background:rgba(0,0,0,0.5); z-index:1; 
   }
 
+  /* Mantendo o formato do contêiner anterior */
   .container {
-    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-    display: none; align-items: center; justify-content: center; flex-direction: column;
-    width: 85%; max-width: 500px; padding: 30px; border-radius: 20px;
-    background: rgba(0,0,0,0.3); backdrop-filter: blur(10px); z-index: 10;
-    opacity: 0; transition: opacity 0.8s;
-  }
-
-  #desabafo-screen {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    display: none; align-items: center; justify-content: center;
-    background: rgba(0, 0, 0, 0.95); z-index: 200; backdrop-filter: blur(15px);
-  }
-
-  .desabafo-box {
-    width: 80%; max-width: 350px; padding: 25px; border-radius: 15px;
-    background: rgba(255, 255, 255, 0.05); border-left: 3px solid white;
-    font-style: italic; line-height: 1.6; text-align: left;
-  }
-
-  button {
-    margin-top: 20px; padding: 12px 25px; background: none;
-    border: 1px solid white; color: white; border-radius: 30px;
-    cursor: pointer; font-family: Georgia, serif;
-  }
-  #btn-prosseguir { background: white; color: black; font-weight: bold; width: 100%; }
-
-  #progress-bar { position:absolute; bottom:0; left:0; width:100%; height:4px; background:rgba(255,255,255,0.1); z-index:5; }
-  #progress { height:100%; width:0%; background:white; transition: width 8s linear; }
-
-  .click-zone { position:absolute; top:0; height:100%; width:50%; z-index:50; display:none; }
-  .click-left { left:0; } .click-right { right:0; }
-
-  #full-message {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.95); display: none;
-    align-items: center; justify-content: center; z-index: 9999;
+    position: relative;
+    z-index: 2;
+    width: 85%;
+    max-width: 500px;
+    padding: clamp(30px, 8vw, 50px);
+    background: rgba(0,0,0,0.25);
+    border-radius: 20px;
     backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    
+    /* Animação suave ao carregar */
+    opacity: 0;
+    transform: translateY(15px);
+    animation: surge 2s ease-out forwards;
   }
-  .message-box {
-    background: rgba(255, 255, 255, 0.08); padding: 25px;
-    border-radius: 20px; width: 90%; max-width: 400px;
-    text-align: left; font-size: 14px; line-height: 1.4;
+
+  .mensagem {
+    font-size: clamp(22px, 5vw, 32px);
+    letter-spacing: 1px;
+    line-height: 1.4;
+    text-shadow: 0 2px 15px rgba(0,0,0,0.9);
   }
-  .assinatura-principal { margin-top: 15px; opacity: 0; transition: 1s; font-style: italic; }
-  .show-element { opacity: 1 !important; pointer-events: auto !important; }
+
+  @keyframes surge {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 </style>
 </head>
 <body>
 
 <div class="overlay"></div>
 
-<div class="start-screen" id="start">✨ Toque na tela para começar</div>
-
-<div id="interludio" class="container">
-  <p>Se você voltou aqui...<br>tem algo que talvez devesse ler.</p>
-  <button id="btn-ler-desabafo">Ler mensagem</button>
+<div class="container">
+  <div class="mensagem">desculpa</div>
 </div>
 
-<div id="desabafo-screen">
-  <div class="desabafo-box">
-    "Sinto muito por ter me afastado.<br>
-    Mas chegou um momento em que eu não podia mais insistir sozinho.<br><br>
-    Foi difícil tomar essa decisão, mas eu tentei até onde conseguia sem me quebrar.<br>
-    Talvez não tenha sido suficiente, mas foi tudo o que eu podia oferecer.<br><br>
-    Sinto muito."
-    <button id="btn-prosseguir">Continuar</button>
-  </div>
-</div>
-
-<div id="text-container" class="container">
-  <div id="text-content"></div>
-</div>
-
-<div class="click-zone click-left" id="c-left"></div>
-<div class="click-zone click-right" id="c-right"></div>
-
-<audio id="music" loop playsinline>
-  <source src="./musica.mp3" type="audio/mpeg">
-</audio>
-
-<div id="progress-bar"><div id="progress"></div></div>
-
-<div id="full-message" onclick="this.style.display='none'">
-  <div class="message-box" onclick="event.stopPropagation()">
-    <div id="texto-inteiro"></div>
-    <hr style="border:0; border-top:1px solid rgba(255,255,255,0.2); margin:15px 0;">
-    <p style="text-align:center; font-size:10px; opacity:0.5;">(toque fora para fechar)</p>
-  </div>
-</div>
-
-<script>
-const frases = [
-  "Dizem que a lua tem um brilho que chama atenção mesmo de longe.",
-  "Mas, sendo sincero, o seu sorriso consegue fazer exatamente isso comigo.",
-  "Seus olhos castanhos carregam uma calma que lembra o pôr do sol, quentes, intensos e difíceis de ignorar.",
-  "Talvez eu esteja exagerando…",
-  "Mas, se for pra comparar você com algo grandioso, eu escolheria tudo aquilo que faz a gente parar por alguns segundos só pra admirar.",
-  "Existem coisas no mundo que não passam despercebidas:<br><br>A imensidão do mar,<br>O brilho da lua,<br>O silêncio bonito de um pôr do sol.",
-  "E, de algum jeito, você entra nessa lista.",
-  "<span style='font-size:24px'>✨ Só queria te lembrar o quanto você é incrível.</span>"
-];
-
-let index = 0;
-let timer = null;
-const music = document.getElementById("music");
-
-function mostrarFrase() {
-  clearTimeout(timer);
-  const container = document.getElementById("text-container");
-  const content = document.getElementById("text-content");
-  const prog = document.getElementById("progress");
-
-  container.style.opacity = "0";
-  prog.style.transition = "none";
-  prog.style.width = "0%";
-
-  setTimeout(() => {
-    content.innerHTML = frases[index];
-    container.style.display = "flex";
-    setTimeout(() => container.style.opacity = "1", 50);
-    
-    setTimeout(() => {
-      prog.style.transition = "width 8s linear";
-      prog.style.width = "100%";
-    }, 100);
-
-    if (index === frases.length - 1) {
-      document.getElementById("c-left").style.display = "none";
-      document.getElementById("c-right").style.display = "none";
-      
-      if(!document.getElementById("final-ui")) {
-        const ui = document.createElement("div");
-        ui.id = "final-ui";
-        ui.innerHTML = `
-          <div class="assinatura-principal" id="ass">De Lucas para Thamires ❤️</div>
-          <button id="btn-f" style="opacity:0; transition:1s">Ler mensagem completa</button>
-          <br>
-          <button id="btn-r" style="opacity:0; transition:1s; border:none; font-size:12px; text-decoration:underline">ver novamente</button>
-        `;
-        container.appendChild(ui);
-        setTimeout(() => document.getElementById("ass").classList.add("show-element"), 1000);
-        setTimeout(() => document.getElementById("btn-f").classList.add("show-element"), 2000);
-        setTimeout(() => document.getElementById("btn-r").classList.add("show-element"), 3000);
-        
-        document.getElementById("btn-f").onclick = abrirCarta;
-        document.getElementById("btn-r").onclick = () => { location.reload(); };
-      }
-    } else {
-      timer = setTimeout(() => { index++; mostrarFrase(); }, 8000);
-    }
-  }, 400);
-}
-
-function abrirCarta() {
-  const limpo = frases.map(f => f.replace(/<[^>]*>?/gm, ''));
-  document.getElementById("texto-inteiro").innerHTML = limpo.join("<br><br>") + "<br><br><i>De Lucas para Thamires ❤️</i>";
-  document.getElementById("full-message").style.display = "flex";
-}
-
-document.getElementById("start").onclick = function() {
-  this.style.opacity = "0";
-  music.play().catch(() => {});
-  setTimeout(() => {
-    this.style.display = "none";
-    const interludio = document.getElementById("interludio");
-    interludio.style.display = "flex";
-    setTimeout(() => interludio.style.opacity = "1", 50);
-  }, 600);
-};
-
-document.getElementById("btn-ler-desabafo").onclick = function() {
-  document.getElementById("interludio").style.display = "none";
-  document.getElementById("desabafo-screen").style.display = "flex";
-};
-
-document.getElementById("btn-prosseguir").onclick = function() {
-  document.getElementById("desabafo-screen").style.display = "none";
-  document.getElementById("c-left").style.display = "block";
-  document.getElementById("c-right").style.display = "block";
-  mostrarFrase();
-};
-
-document.getElementById("c-left").onclick = () => { if(index > 0) { index--; mostrarFrase(); } };
-document.getElementById("c-right").onclick = () => { if(index < frases.length - 1) { index++; mostrarFrase(); } };
-</script>
 </body>
 </html>
